@@ -1,0 +1,68 @@
+.navbar {
+    position: fixed;
+    top: 15px; /* Margin from top */
+    left: 15px;
+    right: 15px;
+    height: 64px;
+    background: var(--primary); /* Deep Navy */
+    border-radius: var(--radius-pill);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Added */
+    padding: 0 15px;
+    box-shadow: var(--shadow-lg);
+    max-width: 470px; /* Container aligned */
+    margin: 0 auto;
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 800;
+    color: white;
+}
+
+.logo i {
+    color: var(--accent);
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    position: relative;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+.badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 8px;
+    height: 8px;
+    background: var(--danger);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+}
+
+.nav-right {
+    display: flex;
+    gap: 8px;
+}

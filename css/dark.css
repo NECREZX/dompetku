@@ -1,0 +1,81 @@
+.dark-mode {
+    --primary: #cbd5e1;
+    --primary-light: #94a3b8;
+    --accent: #3b82f6;
+    --accent-light: #60a5fa;
+    --background: #020617;
+    --surface: #0f172a;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #1e293b;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    
+    /* Dynamic Colors for JS Components */
+    --card-gradient: linear-gradient(135deg, #1e293b, #0f172a);
+    --chart-grid: rgba(255, 255, 255, 0.05);
+    --chart-text: #94a3b8;
+}
+
+/* Base Fixes */
+.dark-mode body { background-color: var(--background); color: var(--text); }
+.dark-mode h1, .dark-mode h2, .dark-mode h3 { color: #ffffff; }
+
+/* Component Specifics */
+.dark-mode .card {
+    background-color: var(--surface);
+    border-color: var(--border);
+}
+
+.dark-mode .card:hover { border-color: var(--accent); }
+
+.dark-mode .card-title { color: var(--text-muted); }
+.dark-mode .card-value { color: #ffffff; }
+
+/* Balance Card Gradient Fix */
+.dark-mode .balance-card {
+    background: linear-gradient(135deg, #1e293b, #3b82f6) !important;
+}
+
+/* Forms Fix */
+.dark-mode input, .dark-mode select, .dark-mode textarea {
+    background-color: #020617;
+    border-color: var(--border);
+    color: #ffffff;
+}
+.dark-mode input:focus { background-color: #0f172a; }
+
+.dark-mode label { color: #cbd5e1; }
+
+.dark-mode .tab-btn.active { background-color: #1e293b; color: var(--accent-light); }
+.dark-mode .nav-btn { background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
+
+/* Buttons Fix */
+.dark-mode .btn-primary {
+    background: var(--accent);
+    color: #ffffff;
+}
+.dark-mode .btn-primary:hover { background: var(--accent-light); }
+
+.dark-mode .btn-outline {
+    border-color: var(--border);
+    color: var(--text);
+}
+.dark-mode .btn-outline:hover { background: var(--surface); border-color: var(--accent); }
+
+.dark-mode th { background-color: #1e293b; color: #cbd5e1; border-color: var(--border); }
+.dark-mode td { border-color: var(--border); color: #e2e8f0; }
+
+.dark-mode .sidebar { background-color: #020617; border-right: 1px solid var(--border); }
+.dark-mode .sidebar-item { color: #94a3b8; }
+.dark-mode .sidebar-item.active { background: #1e293b; color: #ffffff; }
+
+.dark-mode .bottom-bar { background: var(--surface); border-top: 1px solid var(--border); }
+.dark-mode .nav-item { color: #94a3b8; }
+.dark-mode .nav-item.active { color: var(--accent-light); }
+
+.dark-mode .modal-content { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.dark-mode .close-modal { background: #1e293b; color: #ffffff; }
+
+.dark-mode .toast { background: #1e293b; border-color: var(--accent); color: #ffffff; }
+
+.dark-mode .badge { border-color: var(--surface); }

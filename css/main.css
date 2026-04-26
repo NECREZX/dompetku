@@ -1,0 +1,110 @@
+:root {
+    /* Colors - Harmonized Deep Navy Palette */
+    --primary: #0f172a;
+    --primary-light: #1e293b;
+    --accent: #3b82f6;
+    --accent-light: #60a5fa;
+    --success: #10b981;
+    --danger: #f43f5e;
+    --warning: #f59e0b;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    
+    /* Spacing & Misc */
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --radius: 20px;
+    --radius-pill: 9999px;
+    --radius-sm: 14px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Base Layout */
+.content-area {
+    padding: 100px 16px 140px 16px; /* Balanced padding */
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+}
+
+/* Typography */
+h1, h2, h3 { font-weight: 800; color: var(--primary); letter-spacing: -0.5px; margin-bottom: 0.5rem; }
+p { color: var(--text-muted); font-size: 14px; }
+
+/* FAB - Floating Action Button */
+.fab {
+    position: fixed;
+    bottom: 110px; /* Above bottom bar */
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+    transition: var(--transition);
+}
+
+.fab:active { transform: scale(0.9) rotate(90deg); }
+
+/* Horizontal Tabs (Sub-navigation) */
+.sub-nav {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    scrollbar-width: none;
+}
+.sub-nav::-webkit-scrollbar { display: none; }
+
+
+
+/* Utility Classes */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.mt-4 { margin-top: 16px; }
+
+/* Scrollbar Hide for Clean UI */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
