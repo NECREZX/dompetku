@@ -3,6 +3,8 @@ const Export = {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const trx = customData || Storage.get(Storage.KEYS.TRANSAKSI);
+        const categories = Storage.get(Storage.KEYS.KATEGORI);
+        const sources = Storage.get(Storage.KEYS.SUMBER);
         
         // Header Colors & Styling
         const primaryColor = [30, 41, 59]; // Deep Navy
@@ -37,9 +39,19 @@ const Export = {
             if (t.type === 'pemasukan') totalIncome += amount;
             else totalExpense += amount;
 
+            let subLabel = '-';
+            if (t.type === 'pemasukan') {
+                const source = sources.find(s => s.id === t.sourceId);
+                subLabel = source ? source.name : 'Tanpa Sumber';
+            } else {
+                const category = categories.find(c => c.id === t.categoryId);
+                subLabel = category ? category.name : 'Tanpa Kategori';
+            }
+
             return [
                 Format.date(t.date),
                 t.title,
+                subLabel,
                 t.type.toUpperCase(),
                 Format.rupiah(amount)
             ];
@@ -48,17 +60,17 @@ const Export = {
         // Main Table
         doc.autoTable({
             startY: 55,
-            head: [['Tanggal', 'Judul', 'Tipe', 'Jumlah']],
+            head: [['Tanggal', 'Judul', 'Keterangan', 'Tipe', 'Jumlah']],
             body: tableData,
             theme: 'grid',
             headStyles: { fillColor: primaryColor, textColor: [255, 255, 255], fontStyle: 'bold' },
-            styles: { fontSize: 10 },
+            styles: { fontSize: 9 },
             columnStyles: {
-                3: { fontStyle: 'bold', halign: 'right' }
+                4: { fontStyle: 'bold', halign: 'right' }
             },
             didParseCell: function(data) {
                 if (data.section === 'body') {
-                    const type = data.row.raw[2]; // Index 2 is 'TIPE'
+                    const type = data.row.raw[3]; // Index 3 is 'TIPE'
                     if (type === 'PEMASUKAN') {
                         data.cell.styles.fillColor = [240, 253, 244]; // Soft Green
                     } else if (type === 'PENGELUARAN') {
