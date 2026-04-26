@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dompetku-v16';
+const CACHE_NAME = 'dompetku-v17';
 const assets = [
   './',
   './index.html',
