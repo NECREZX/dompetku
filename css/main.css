@@ -70,10 +70,9 @@ body {
 }
 
 .splash-logo-img {
-    width: 112%;
-    height: 112%;
+    width: 110%;
+    height: 110%;
     object-fit: cover;
-    transform: scale(1.05); /* Zoom tipis agar kotaknya menyentuh lingkaran */
 }
 
 .splash-loader {
