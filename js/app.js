@@ -9,6 +9,16 @@ const App = {
         this.renderBottomBar();
         this.loadContent();
         this.checkNotifications();
+
+        // Hide Splash Screen
+        setTimeout(() => {
+            const splash = document.getElementById('splashScreen');
+            if (splash) {
+                splash.classList.add('fade-out');
+                // Remove from DOM after transition
+                setTimeout(() => splash.remove(), 800);
+            }
+        }, 2000);
     },
 
     bindEvents() {
