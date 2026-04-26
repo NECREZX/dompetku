@@ -91,6 +91,8 @@ const RiwayatKeuangan = {
     renderList() {
         const list = document.getElementById('riwayat-list');
         const trx = this.getFilteredData();
+        const categories = Storage.get(Storage.KEYS.KATEGORI);
+        const sources = Storage.get(Storage.KEYS.SUMBER);
 
         if (trx.length === 0) {
             list.innerHTML = `<div class="card text-center py-12"><p>Tidak ada transaksi yang cocok.</p></div>`;
@@ -120,16 +122,31 @@ const RiwayatKeuangan = {
                         <div class="table-responsive">
                             <table style="margin-bottom:0">
                                 <tbody>
-                                    ${displayedTrx.map(t => `
-                                        <tr>
-                                            <td><div style="font-weight:700">${t.title}</div></td>
-                                            <td style="text-align:right">
-                                                <div class="${t.type === 'pemasukan' ? 'text-success' : 'text-danger'}" style="font-weight:800">
-                                                    ${t.type === 'pemasukan' ? '+' : '-'}${Format.rupiah(t.amount)}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    `).join('')}
+                                    ${displayedTrx.map(t => {
+                                        const isIncome = t.type === 'pemasukan';
+                                        let subLabel = '';
+                                        if (isIncome) {
+                                            const source = sources.find(s => s.id === t.sourceId);
+                                            subLabel = source ? source.name : 'Tanpa Sumber';
+                                        } else {
+                                            const category = categories.find(c => c.id === t.categoryId);
+                                            subLabel = category ? category.name : 'Tanpa Kategori';
+                                        }
+
+                                        return `
+                                            <tr>
+                                                <td>
+                                                    <div style="font-weight:700">${t.title}</div>
+                                                    <div style="font-size:11px; color:var(--text-muted)">${subLabel}</div>
+                                                </td>
+                                                <td style="text-align:right">
+                                                    <div class="${isIncome ? 'text-success' : 'text-danger'}" style="font-weight:800">
+                                                        ${isIncome ? '+' : '-'}${Format.rupiah(t.amount)}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
                                 </tbody>
                             </table>
                             ${hasMore ? `
