@@ -41,6 +41,7 @@ const UI = {
                     <button class="btn btn-outline" style="width:auto; padding:4px 12px; font-size:11px" onclick="UI.clearNotifications()">Hapus Semua</button>
                 </div>
             </div>
+            <br>
             <div style="max-height: 400px; overflow-y: auto; padding-right: 4px;">
                 ${notifs.length === 0 
                     ? '<div class="text-center py-12"><i class="fas fa-bell-slash mb-2" style="font-size:32px; color:var(--border)"></i><p>Belum ada notifikasi.</p></div>'
@@ -68,7 +69,7 @@ const UI = {
                     `}).join('')}
             </div>
         `;
-        this.showModal('Notifikasi Sistem', html);
+        this.showModal('Notifikasi', html);
     },
 
     clearNotifications() {
