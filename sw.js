@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dompetku-v2'; // Naikkan versi ke v2
+const CACHE_NAME = 'dompetku-v3';
 const assets = [
   './',
   './index.html',
