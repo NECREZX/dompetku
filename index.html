@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DompetKu — Pencatat Keuangan & Tabungan</title>
+    <meta name="description" content="DompetKu adalah aplikasi pencatat keuangan dan tabungan pribadi yang cerdas, aman, dan mudah digunakan.">
+    <meta name="theme-color" content="#1e293b">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DompetKu">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/bottombar.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/dark.css">
+
+    <!-- Chart.js & jsPDF -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body class="light-mode">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <button id="sidebarToggle" class="nav-btn"><i class="fas fa-bars"></i></button>
+        <div class="logo">
+            <i class="fas fa-wallet"></i>
+            <span>DompetKu</span>
+        </div>
+        <div class="nav-right">
+            <button id="notifBtn" class="nav-btn"><i class="fas fa-bell"></i><span class="badge" id="notifBadge"></span></button>
+            <button id="themeToggle" class="nav-btn"><i class="fas fa-moon"></i></button>
+        </div>
+    </nav>
+
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <span>DompetKu</span>
+            </div>
+        </div>
+
+        <div class="sidebar-label">MAIN MENU</div>
+        <div class="sidebar-menu">
+            <button class="sidebar-item active" data-module="keuangan">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Manajemen Pencatatan</span>
+            </button>
+            <button class="sidebar-item" data-module="tabungan">
+                <i class="fas fa-piggy-bank"></i>
+                <span>Manajemen Tabungan</span>
+            </button>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff" alt="User">
+                <div class="user-info">
+                    <div class="user-name">Pengguna Setia</div>
+                    <div class="user-rank">Pro Member</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="appContent" class="content-area">
+        <!-- Content will be injected here -->
+    </main>
+
+
+
+    <!-- Bottom Bar -->
+    <footer class="bottom-bar">
+        <div class="bottom-nav" id="bottomNav">
+            <!-- Dynamic Nav based on Module -->
+        </div>
+    </footer>
+
+    <!-- Modals & UI Components -->
+    <div id="toastContainer" class="toast-container"></div>
+    <div id="modalContainer" class="modal-container hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Judul Modal</h3>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/format.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/export.js"></script>
+    
+    <!-- Module Finance Scripts -->
+    <script src="js/keuangan/sumber.js"></script>
+    <script src="js/keuangan/transaksi.js"></script>
+    <script src="js/keuangan/riwayat.js"></script>
+    
+    <!-- Module Savings Scripts -->
+    <script src="js/tabungan/tujuan.js"></script>
+    <script src="js/tabungan/riwayat.js"></script>
+    <script src="js/tabungan/kelola.js"></script>
+    
+    <!-- Initialization -->
+    <!-- Registration for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker Registered'))
+                    .catch(err => console.log('Service Worker Failed', err));
+            });
+        }
+    </script>
+</body>
+</html>
