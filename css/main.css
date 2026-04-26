@@ -58,18 +58,21 @@ body {
 }
 
 .splash-logo-container {
-    width: 220px; /* Matched to circular logo size */
+    width: 220px;
     height: 220px;
     margin: 0 auto 30px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%; /* Membuat jadi lingkaran */
+    overflow: hidden;    /* Memastikan gambar terpotong jadi lingkaran */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
 .splash-logo-img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover; /* Agar gambar memenuhi lingkaran */
 }
 
 .splash-loader {
