@@ -14,5 +14,10 @@ const Format = {
 
     toHTMLDate(date) {
         return date.toISOString().split('T')[0];
+    },
+
+    dateMonth(dateStr) {
+        const options = { year: 'numeric', month: 'long' };
+        return new Date(dateStr).toLocaleDateString('id-ID', options);
     }
 };
