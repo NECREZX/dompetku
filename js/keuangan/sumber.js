@@ -47,7 +47,7 @@ const SumberKategori = {
                     <table>
                         <thead>
                             <tr>
-                                <th>Nama ${this.activeTab === 'dompet' ? '/ Saldo Awal' : ''}</th>
+                                <th>Nama ${this.activeTab === 'dompet' ? '& Saldo Awal' : ''}</th>
                                 <th style="width:100px; text-align:right">Aksi</th>
                             </tr>
                         </thead>
