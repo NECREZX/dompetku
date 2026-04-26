@@ -5,7 +5,7 @@ const SumberKategori = {
         container.innerHTML = `
             <div class="container slide-in">
                 <div class="flex justify-between items-center mb-6">
-                    <h2>Kategori Dompet</h2>
+                    <h2>Kategori & Dompet</h2>
                     <button class="btn btn-primary" style="width: auto; padding: 10px 20px" onclick="SumberKategori.showAddModal()">
                         <i class="fas fa-plus"></i> Tambah
                     </button>
@@ -47,16 +47,21 @@ const SumberKategori = {
                     <table>
                         <thead>
                             <tr>
-                                <th>Nama</th>
+                                <th>Nama ${this.activeTab === 'dompet' ? '/ Saldo Awal' : ''}</th>
                                 <th style="width:100px; text-align:right">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${data.map(item => `
                                 <tr>
-                                    <td style="font-weight:700">
-                                        ${this.activeTab === 'dompet' ? `<i class="fas ${item.icon || 'fa-wallet'} mr-2" style="color:var(--accent)"></i>` : ''}
-                                        ${item.name}
+                                    <td>
+                                        <div class="flex items-center gap-3">
+                                            ${this.activeTab === 'dompet' ? `<i class="fas ${item.icon || 'fa-wallet'}" style="color:var(--accent); font-size: 18px;"></i>` : ''}
+                                            <div>
+                                                <div style="font-weight:700">${item.name}</div>
+                                                ${this.activeTab === 'dompet' ? `<div style="font-size:11px; color:var(--text-muted)">Saldo Awal: ${Format.rupiah(item.balance || 0)}</div>` : ''}
+                                            </div>
+                                        </div>
                                     </td>
                                     <td style="text-align:right">
                                         <div class="flex gap-2 justify-end">
@@ -98,6 +103,10 @@ const SumberKategori = {
                 </div>
                 ${this.activeTab === 'dompet' ? `
                 <div class="form-group">
+                    <label>Saldo Awal (Rp)</label>
+                    <input type="number" id="sk-balance" value="${item ? (item.balance || 0) : ''}" placeholder="0">
+                </div>
+                <div class="form-group">
                     <label>Ikon FontAwesome (fa-...)</label>
                     <input type="text" id="sk-icon" value="${item && item.icon ? item.icon : 'fa-wallet'}" placeholder="fa-wallet">
                 </div>
@@ -110,7 +119,10 @@ const SumberKategori = {
     saveItem(e, id = null) {
         e.preventDefault();
         const name = document.getElementById('sk-name').value;
+        const balanceInput = document.getElementById('sk-balance');
         const iconInput = document.getElementById('sk-icon');
+        
+        const balance = balanceInput ? Number(balanceInput.value) : 0;
         const icon = iconInput ? (iconInput.value || 'fa-wallet') : null;
         
         let key = Storage.KEYS.DOMPET;
@@ -123,14 +135,20 @@ const SumberKategori = {
             items = items.map(i => {
                 if (i.id === id) {
                     const updated = { ...i, name };
-                    if (icon) updated.icon = icon;
+                    if (this.activeTab === 'dompet') {
+                        updated.balance = balance;
+                        updated.icon = icon;
+                    }
                     return updated;
                 }
                 return i;
             });
         } else {
             const newItem = { id: Date.now().toString(), name };
-            if (icon) newItem.icon = icon;
+            if (this.activeTab === 'dompet') {
+                newItem.balance = balance;
+                newItem.icon = icon;
+            }
             items.push(newItem);
             Storage.addNotif('Data Diperbarui', `Berhasil menambahkan ${name} ke daftar ${this.activeTab}`);
         }
