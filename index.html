@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DompetKu — Pencatat Keuangan & Tabungan</title>
     <meta name="description" content="DompetKu adalah aplikasi pencatat keuangan dan tabungan pribadi yang cerdas, aman, dan mudah digunakan.">
-    <meta name="theme-color" content="#1e293b">
+    <meta name="theme-color" content="#0f172a">
     
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -39,6 +39,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body class="light-mode">
+
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <h1 class="splash-title">DompetKu</h1>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
 
     <!-- Navbar -->
     <nav class="navbar">
