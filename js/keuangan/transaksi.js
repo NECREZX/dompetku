@@ -70,7 +70,13 @@ const DashboardKeuangan = {
         const cats = Storage.get(Storage.KEYS.KATEGORI);
         
         let income = 0, expense = 0;
-        const walletBalances = wallets.map(w => ({ ...w, balance: 0 }));
+        // Initialize balances with Saldo Awal from each wallet
+        const walletBalances = wallets.map(w => ({ 
+            ...w, 
+            balance: Number(w.balance || 0) 
+        }));
+
+        let totalInitialBalance = walletBalances.reduce((sum, w) => sum + w.balance, 0);
 
         // Charts preparation
         const catStats = {};
@@ -109,7 +115,7 @@ const DashboardKeuangan = {
         const barExpense = allDates.map(d => dailyExpense[d] || 0);
 
         return {
-            saldo: income - expense,
+            saldo: totalInitialBalance + income - expense,
             income,
             expense,
             walletBalances,
