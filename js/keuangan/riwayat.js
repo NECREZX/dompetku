@@ -16,6 +16,8 @@ const RiwayatKeuangan = {
                     </button>
                 </div>
 
+                <br>
+
                 <div class="card mb-6">
                     <div class="form-group" style="margin-bottom:12px">
                         <label style="font-size:12px; margin-bottom:4px; display:block">Cari Transaksi</label>
