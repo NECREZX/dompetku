@@ -41,7 +41,7 @@ const DashboardKeuangan = {
 
                 <br>
 
-                <h2 class="mb-4">Statistik Pengeluaran</h2>
+                <h2 class="mb-4">Income vs Outcome</h2>
                 <div class="card mb-6">
                     <div class="chart-container" style="height: 250px">
                         <canvas id="barChart"></canvas>
