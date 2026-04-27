@@ -27,9 +27,9 @@ const DashboardKeuangan = {
 
                 <br>
 
-                <div class="flex gap-4 mb-8" style="overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;">
+                <div class="flex gap-4 mb-8" style="overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none;">
                     ${data.walletBalances.map(w => `
-                        <div class="card" style="min-width: 160px; margin-bottom: 0; padding: 16px; border: 1px solid var(--border);">
+                        <div class="card" style="min-width: calc((100% - 16px) / 2); flex-shrink: 0; margin-bottom: 0; padding: 16px; border: 1px solid var(--border);">
                             <div class="flex items-center gap-2 mb-3">
                                 <i class="fas ${w.icon}" style="color: var(--accent)"></i>
                                 <span style="font-size: 12px; font-weight: 700; color: var(--text-muted)">${w.name}</span>
@@ -41,7 +41,7 @@ const DashboardKeuangan = {
 
                 <br>
 
-                <h2 class="mb-4">Income vs Outcome</h2>
+                <h2 class="mb-4">Statistik Pengeluaran</h2>
                 <div class="card mb-6">
                     <div class="chart-container" style="height: 250px">
                         <canvas id="barChart"></canvas>
