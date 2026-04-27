@@ -40,6 +40,36 @@
 .sidebar-header {
     padding: 32px 24px;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-close-btn {
+    position: absolute;
+    right: 5px;
+    top: 26px; /* Precisely aligned with navbar toggle */
+    width: 42px;
+    height: 42px;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 100;
+    opacity: 0.6;
+}
+
+.sidebar-close-btn:hover {
+    opacity: 1;
+    color: var(--accent) !important;
+}
+
+.sidebar-close-btn i {
+    font-size: 18px;
 }
 
 .sidebar-logo {
