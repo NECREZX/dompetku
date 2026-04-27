@@ -34,14 +34,24 @@ const Storage = {
 
     addNotif(title, desc) {
         const notifs = this.get(this.KEYS.NOTIF);
-        notifs.unshift({
-            id: Date.now(),
+        const now = new Date();
+        const localISO = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString();
+        
+        notifs.push({
+            id: Date.now().toString(),
             title,
             desc,
-            date: new Date().toISOString(),
-            unread: true
+            date: localISO // Local time
         });
-        this.set(this.KEYS.NOTIF, notifs.slice(0, 20)); // Keep last 20
+        this.set(this.KEYS.NOTIF, notifs);
+        UI.updateNotifBadge(notifs.length);
+        
+        // Real-time toast feedback
+        UI.showToast(`${title}: ${desc}`);
+
+        // System notification (Pop-up OS)
+        UI.sendSystemNotif(title, desc);
+        
         if (typeof App !== 'undefined') App.checkNotifications();
     }
 };
