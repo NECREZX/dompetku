@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dompetku-v33';
+const CACHE_NAME = 'dompetku-v34'; 
 const assets = [
   './',
   './index.html',
@@ -19,6 +19,9 @@ const assets = [
   './js/tabungan/tujuan.js',
   './js/tabungan/riwayat.js',
   './js/tabungan/kelola.js',
+  './js/aktivitas/dashboard.js',
+  './js/aktivitas/tambah.js',
+  './js/aktivitas/riwayat.js',
   './manifest.json',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png'
@@ -48,5 +51,12 @@ self.addEventListener('fetch', event => {
     caches.match(event.request).then(response => {
       return response || fetch(event.request);
     })
+  );
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('/')
   );
 });
