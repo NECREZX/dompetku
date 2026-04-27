@@ -62,7 +62,7 @@ const UI = {
                                 <div style="flex:1">
                                     <div style="font-weight:800; font-size:13px; color: var(--primary)">${n.title}</div>
                                     <p style="font-size:12px; color:var(--text-muted); margin: 2px 0;">${n.desc}</p>
-                                    <div style="font-size:10px; color:var(--text-muted); font-weight: 700;">${Format.date(n.date)}</div>
+                                    <div style="font-size:10px; color:var(--text-muted); font-weight: 700;">${Format.dateTime(n.date)}</div>
                                 </div>
                             </div>
                         </div>
@@ -102,10 +102,83 @@ const UI = {
     updateNotifBadge(count) {
         const badge = document.getElementById('notifBadge');
         if (count > 0) {
+            badge.innerText = count > 9 ? '9+' : count;
             badge.classList.remove('hidden');
         } else {
             badge.classList.add('hidden');
         }
+    },
+
+    startClock() {
+        const clockEl = document.getElementById('navbarClock');
+        setInterval(() => {
+            const now = new Date();
+            // Force en-GB to get colons instead of Indonesian dots
+            clockEl.innerText = now.toLocaleTimeString('en-GB', { hour12: false });
+        }, 1000);
+    },
+
+
+    async requestNotificationPermission() {
+        if ('Notification' in window) {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                console.log('Notifikasi diaktifkan');
+            }
+        }
+    },
+
+    async sendSystemNotif(title, body) {
+        // Cek dukungan browser
+        if (!('Notification' in window)) {
+            console.warn('Browser tidak mendukung notifikasi sistem.');
+            return;
+        }
+
+        // Jika diizinkan, kirim
+        if (Notification.permission === 'granted') {
+            this._triggerNotification(title, body);
+        } 
+        // Jika belum ditanya, minta izin dulu
+        else if (Notification.permission !== 'denied') {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                this._triggerNotification(title, body);
+            }
+        }
+    },
+
+    _triggerNotification(title, body) {
+        try {
+            new Notification(title, {
+                body: body,
+                icon: 'https://cdn-icons-png.flaticon.com/512/2991/2991148.png', // Fallback icon
+                badge: 'https://cdn-icons-png.flaticon.com/512/2991/2991148.png',
+                vibrate: [200, 100, 200]
+            });
+        } catch (e) {
+            console.error('Gagal mengirim notifikasi:', e);
+        }
+    },
+
+    // MESIN PENGINGAT (Cek setiap menit)
+    startReminderEngine() {
+        setInterval(() => {
+            console.log('Mesin Pengingat: Mengecek deadline...');
+            const savings = Storage.get(Storage.KEYS.TABUNGAN);
+            const now = Format.toHTMLDate(new Date()); // Hanya tanggal dulu untuk contoh ini
+            
+            savings.forEach(s => {
+                // Contoh: Jika hari ini adalah tanggal target dan belum tercapai
+                if (s.deadline === now && s.current < s.target) {
+                    this.sendSystemNotif('Pengingat Tabungan!', `Target "${s.title}" jatuh tempo hari ini.`);
+                }
+            });
+        }, 60000); // Cek tiap 60 detik
+    },
+
+    testNotification() {
+        this.sendSystemNotif('Tes Notifikasi DompetKu', 'Jika Anda melihat ini, berarti pengingat Anda sudah aktif dan normal! ✅');
     },
 
     updateProfileUI() {
@@ -192,3 +265,8 @@ window.addEventListener('scroll', () => {
         scrollToTopBtn.classList.remove('visible');
     }
 });
+
+// Initialize
+UI.startClock();
+UI.requestNotificationPermission();
+
