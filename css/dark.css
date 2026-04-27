@@ -1,81 +1,158 @@
 .dark-mode {
-    --primary: #cbd5e1;
-    --primary-light: #94a3b8;
+    /* Colors - Specialized for Deep Night Theme */
+    --primary: #1e293b;       /* Navy Lighter */
+    --primary-light: #334155;
     --accent: #3b82f6;
     --accent-light: #60a5fa;
-    --background: #020617;
-    --surface: #0f172a;
-    --text: #f8fafc;
-    --text-muted: #94a3b8;
+    --background: #020617;    /* Deepest Black-Blue */
+    --surface: #0f172a;       /* Card Navy */
+    --text: #f8fafc;          /* Bright White-Gray */
+    --text-muted: #94a3b8;    /* Slate Gray */
     --border: #1e293b;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
     
-    /* Dynamic Colors for JS Components */
-    --card-gradient: linear-gradient(135deg, #1e293b, #0f172a);
+    /* Dynamic Overrides */
     --chart-grid: rgba(255, 255, 255, 0.05);
-    --chart-text: #94a3b8;
 }
 
 /* Base Fixes */
-.dark-mode body { background-color: var(--background); color: var(--text); }
-.dark-mode h1, .dark-mode h2, .dark-mode h3 { color: #ffffff; }
-
-/* Component Specifics */
-.dark-mode .card {
-    background-color: var(--surface);
-    border-color: var(--border);
+.dark-mode body { 
+    background-color: var(--background); 
+    color: var(--text); 
 }
 
-.dark-mode .card:hover { border-color: var(--accent); }
+.dark-mode h1, .dark-mode h2, .dark-mode h3 { 
+    color: #ffffff !important; 
+}
+
+/* Navbar Fix */
+.dark-mode .navbar {
+    background: #1e293b !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+/* Card & Table Fix */
+.dark-mode .card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
 
 .dark-mode .card-title { color: var(--text-muted); }
 .dark-mode .card-value { color: #ffffff; }
 
-/* Balance Card Gradient Fix */
-.dark-mode .balance-card {
-    background: linear-gradient(135deg, #1e293b, #3b82f6) !important;
+.dark-mode th { 
+    background-color: #1e293b; 
+    color: var(--text-muted); 
 }
 
-/* Forms Fix */
-.dark-mode input, .dark-mode select, .dark-mode textarea {
-    background-color: #020617;
-    border-color: var(--border);
-    color: #ffffff;
+.dark-mode tr {
+    border-bottom: 1px solid var(--border);
 }
-.dark-mode input:focus { background-color: #0f172a; }
 
-.dark-mode label { color: #cbd5e1; }
+/* Form Fix (Input & Month Picker) */
+.dark-mode input, 
+.dark-mode select, 
+.dark-mode textarea {
+    background-color: #020617 !important;
+    border: 1.5px solid var(--border) !important;
+    color: #ffffff !important;
+}
 
-.dark-mode .tab-btn.active { background-color: #1e293b; color: var(--accent-light); }
-.dark-mode .nav-btn { background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
+.dark-mode input:focus {
+    background-color: #0f172a !important;
+    border-color: var(--accent) !important;
+}
+
+.dark-mode label { 
+    color: #cbd5e1 !important; 
+}
 
 /* Buttons Fix */
 .dark-mode .btn-primary {
-    background: var(--accent);
-    color: #ffffff;
+    background: var(--accent) !important;
+    color: #ffffff !important;
 }
-.dark-mode .btn-primary:hover { background: var(--accent-light); }
 
 .dark-mode .btn-outline {
-    border-color: var(--border);
-    color: var(--text);
+    border-color: var(--border) !important;
+    color: #ffffff !important;
 }
-.dark-mode .btn-outline:hover { background: var(--surface); border-color: var(--accent); }
 
-.dark-mode th { background-color: #1e293b; color: #cbd5e1; border-color: var(--border); }
-.dark-mode td { border-color: var(--border); color: #e2e8f0; }
+.dark-mode .btn-outline:hover {
+    background: #1e293b !important;
+}
 
-.dark-mode .sidebar { background-color: #020617; border-right: 1px solid var(--border); }
-.dark-mode .sidebar-item { color: #94a3b8; }
-.dark-mode .sidebar-item.active { background: #1e293b; color: #ffffff; }
+/* Component Details */
+.dark-mode .tab-group { background: #020617; }
+.dark-mode .tab-btn.active { background: #1e293b; color: var(--accent-light); }
 
-.dark-mode .bottom-bar { background: var(--surface); border-top: 1px solid var(--border); }
-.dark-mode .nav-item { color: #94a3b8; }
+.dark-mode .nav-btn { 
+    background: rgba(255, 255, 255, 0.05) !important; 
+    color: #ffffff !important; 
+}
+
+.dark-mode .bottom-bar { 
+    background: #0f172a; 
+    border-top: 1px solid #1e293b; 
+}
+
+.dark-mode .nav-item { color: #64748b; }
 .dark-mode .nav-item.active { color: var(--accent-light); }
 
-.dark-mode .modal-content { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-.dark-mode .close-modal { background: #1e293b; color: #ffffff; }
+.dark-mode .modal-content { 
+    background: #0f172a; 
+    border: 1px solid #1e293b; 
+}
 
-.dark-mode .toast { background: #1e293b; border-color: var(--accent); color: #ffffff; }
+/* Color Success/Danger Tweak for Dark Mode visibility */
+.dark-mode .text-success { color: #34d399 !important; }
+.dark-mode .text-danger { color: #fb7185 !important; }
+.dark-mode .text-warning { color: #facc15 !important; }
+.dark-mode .text-primary { color: #ffffff !important; }
+.dark-mode .text-accent { color: var(--accent-light) !important; }
 
-.dark-mode .badge { border-color: var(--surface); }
+/* Activity Dashboard Stats */
+.dark-mode .card div[style*="color: var(--primary)"] {
+    color: #ffffff !important;
+}
+
+/* Timeline & Tables */
+.dark-mode div[style*="background: #fcfdfe"] {
+    background: #1e293b !important;
+    border-bottom-color: var(--border) !important;
+}
+
+.dark-mode .table-responsive table td {
+    color: var(--text-muted);
+}
+
+.dark-mode .table-responsive table td div[style*="color: var(--primary)"] {
+    color: #ffffff !important;
+}
+
+/* SweetAlert Dark Mode Fix */
+.dark-mode .swal2-popup {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid #1e293b;
+}
+
+.dark-mode .swal2-title, 
+.dark-mode .swal2-html-container {
+    color: #f8fafc !important;
+}
+
+.dark-mode .swal2-html-container div[style*="background: #f8fafc"] {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border-left-color: var(--accent) !important;
+}
+
+.dark-mode .swal2-close {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .swal2-timer-progress-bar {
+    background: var(--accent) !important;
+}
