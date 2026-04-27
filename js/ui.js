@@ -177,4 +177,18 @@ document.addEventListener('click', (e) => {
         UI.hideModal();
     }
 });
-
+// Scroll to Top Listener
+window.addEventListener('scroll', () => {
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    if (!scrollToTopBtn) return;
+    
+    // Check if user is at the bottom of the page
+    // window.innerHeight + window.scrollY should be >= document.documentElement.scrollHeight
+    const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+    
+    if (isAtBottom) {
+        scrollToTopBtn.classList.add('visible');
+    } else {
+        scrollToTopBtn.classList.remove('visible');
+    }
+});
