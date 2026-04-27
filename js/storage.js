@@ -8,7 +8,8 @@ const Storage = {
         TABUNGAN_LOG: 'dk_tabungan_log',
         NOTIF: 'dk_notif',
         THEME: 'dk_theme',
-        USER: 'dk_user'
+        USER: 'dk_user',
+        AKTIVITAS: 'dk_aktivitas'
     },
 
     get(key) {
