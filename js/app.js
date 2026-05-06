@@ -147,43 +147,43 @@ const App = {
         
         if (this.currentModule === 'keuangan') {
             html = `
-                <button class="nav-item ${this.currentTab === 'dashboard' ? 'active' : ''}" onclick="App.switchTab('dashboard')">
+                <button class="b-nav-item ${this.currentTab === 'dashboard' ? 'active' : ''}" onclick="App.switchTab('dashboard')">
                     <i class="fas fa-chart-pie"></i><span>Dashboard</span>
                 </button>
-                <button class="nav-item ${this.currentTab === 'transaksi' ? 'active' : ''}" onclick="App.switchTab('transaksi')">
+                <button class="b-nav-item ${this.currentTab === 'transaksi' ? 'active' : ''}" onclick="App.switchTab('transaksi')">
                     <i class="fas fa-plus-circle"></i><span>Transaksi</span>
                 </button>
-                <button class="nav-item ${this.currentTab === 'riwayat' ? 'active' : ''}" onclick="App.switchTab('riwayat')">
+                <button class="b-nav-item ${this.currentTab === 'riwayat' ? 'active' : ''}" onclick="App.switchTab('riwayat')">
                     <i class="fas fa-history"></i><span>Riwayat</span>
                 </button>
-                <button class="nav-item ${this.currentTab === 'sumber' ? 'active' : ''}" onclick="App.switchTab('sumber')">
+                <button class="b-nav-item ${this.currentTab === 'sumber' ? 'active' : ''}" onclick="App.switchTab('sumber')">
                     <i class="fas fa-tags"></i><span>Kategori</span>
                 </button>
             `;
         } else if (this.currentModule === 'tabungan') {
             html = `
-                <button class="nav-item ${this.currentTab === 'dashboard' ? 'active' : ''}" onclick="App.switchTab('dashboard')">
+                <button class="b-nav-item ${this.currentTab === 'dashboard' ? 'active' : ''}" onclick="App.switchTab('dashboard')">
                     <i class="fas fa-chart-pie"></i><span>Dashboard</span>
                 </button>
-                <button class="nav-item ${this.currentTab === 'tujuan' ? 'active' : ''}" onclick="App.switchTab('tujuan')">
+                <button class="b-nav-item ${this.currentTab === 'tujuan' ? 'active' : ''}" onclick="App.switchTab('tujuan')">
                     <i class="fas fa-bullseye"></i><span>Target</span>
                 </button>
-                <button class="nav-item ${this.currentTab === 'riwayat' ? 'active' : ''}" onclick="App.switchTab('riwayat')">
+                <button class="b-nav-item ${this.currentTab === 'riwayat' ? 'active' : ''}" onclick="App.switchTab('riwayat')">
                     <i class="fas fa-clock-rotate-left"></i><span>Riwayat</span>
                 </button>
-                <button class="nav-item ${this.currentTab === 'kelola' ? 'active' : ''}" onclick="App.switchTab('kelola')">
+                <button class="b-nav-item ${this.currentTab === 'kelola' ? 'active' : ''}" onclick="App.switchTab('kelola')">
                     <i class="fas fa-wallet"></i><span>Kelola</span>
                 </button>
             `;
         } else if (this.currentModule === 'aktivitas') {
             html = `
-                <button class="nav-item ${this.currentTab === 'dashboard' ? 'active' : ''}" onclick="App.switchTab('dashboard')">
+                <button class="b-nav-item ${this.currentTab === 'dashboard' ? 'active' : ''}" onclick="App.switchTab('dashboard')">
                     <i class="fas fa-chart-pie"></i><span>Dashboard</span>
                 </button>
-                <button class="nav-item ${this.currentTab === 'tambah' ? 'active' : ''}" onclick="App.switchTab('tambah')">
+                <button class="b-nav-item ${this.currentTab === 'tambah' ? 'active' : ''}" onclick="App.switchTab('tambah')">
                     <i class="fas fa-plus-circle"></i><span>Aktivitas</span>
                 </button>
-                <button class="nav-item ${this.currentTab === 'riwayat' ? 'active' : ''}" onclick="App.switchTab('riwayat')">
+                <button class="b-nav-item ${this.currentTab === 'riwayat' ? 'active' : ''}" onclick="App.switchTab('riwayat')">
                     <i class="fas fa-clock-rotate-left"></i><span>Riwayat</span>
                 </button>
             `;
