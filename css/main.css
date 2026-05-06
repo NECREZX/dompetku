@@ -1,25 +1,41 @@
 :root {
-    /* Colors - Harmonized Deep Navy Palette */
-    --primary: #0f172a;
-    --primary-light: #1e293b;
-    --accent: #3b82f6;
-    --accent-light: #60a5fa;
-    --success: #10b981;
-    --danger: #f43f5e;
+    /* === 60-30-10 Color Rule: LIGHT MODE (Fully Navy) === */
+    /* 60% → Soft Navy Background */
+    --background: #eef2f7;    /* Visible Soft Navy */
+    --surface: #ffffff;       /* Cards = white for clarity */
+
+    /* 30% → Sidebar, Navbar, Bottom Bar */
+    --bar-bg: #1e293b;        /* Professional Navy Blue */
+
+    /* 10% → Accent: Coral (Pink) */
+    --primary: #e8696a;
+    --primary-light: #f0908f;
+    --accent: #e8696a;
+    --accent-light: #f0908f;
+
+    /* Supporting Colors */
+    --success: #10b981;       /* Green for Income */
+    --danger: #e8696a;        /* Pink Coral for Expense */
     --warning: #f59e0b;
-    --background: #f8fafc;
-    --surface: #ffffff;
-    --text: #0f172a;
+
+    /* Text — Navy theme */
+    --text: #0f172a;          
     --text-muted: #64748b;
-    --border: #e2e8f0;
-    
-    /* Spacing & Misc */
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --border: #cbd5e1;
+
+    /* Misc */
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
     --radius: 20px;
     --radius-pill: 9999px;
     --radius-sm: 14px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Liquid Glassmorphism Tokens */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-blur: blur(20px);
+    --bar-text: #ffffff;
 }
 
 * {
@@ -36,6 +52,39 @@ body {
     overflow-x: hidden;
     line-height: 1.6;
     min-height: 100vh;
+}
+
+/* Light mode: headings = Coral accent, body text = dark teal */
+#appContent h1, #appContent h2, #appContent h3,
+#appContent h4, #appContent h5, #appContent h6 {
+    color: var(--accent) !important; /* Coral in light mode */
+}
+
+#appContent p, #appContent td, #appContent li {
+    color: var(--text);
+}
+
+#appContent label {
+    color: var(--text) !important;
+}
+
+/* Force white on ALL bar elements — overrides anything */
+.navbar *, .bottom-bar *, .sidebar * {
+    /* Inherited white will cascade — specific overrides below */
+}
+.navbar .logo,
+.navbar #navbarClock,
+.navbar .nav-btn {
+    color: #ffffff !important;
+}
+.bottom-bar .nav-item {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+.bottom-bar .nav-item.active {
+    color: #ffffff !important;
+}
+.bottom-bar .nav-item.active i {
+    color: var(--accent) !important;
 }
 
 /* Splash Screen (Matched to System) */
@@ -179,13 +228,14 @@ p { color: var(--text-muted); font-size: 14px; }
 
 
 /* Utility Classes */
+/* Utility Classes with Light Mode Force */
 .hidden { display: none !important; }
 .text-center { text-align: center; }
-.text-success { color: var(--success); }
-.text-danger { color: var(--danger); }
-.text-warning { color: var(--warning); }
-.text-primary { color: var(--primary); }
-.text-accent { color: var(--accent); }
+.text-success, .card-value.text-success { color: #10b981 !important; font-weight: 800 !important; }
+.text-danger, .card-value.text-danger { color: #e8696a !important; font-weight: 800 !important; }
+.text-warning { color: var(--warning) !important; }
+.text-primary { color: var(--primary) !important; }
+.text-accent { color: var(--accent) !important; }
 .flex { display: flex; }
 .items-center { align-items: center; }
 .justify-between { justify-content: space-between; }
@@ -198,4 +248,92 @@ p { color: var(--text-muted); font-size: 14px; }
 ::-webkit-scrollbar {
     width: 0;
     height: 0;
+}
+
+/* Responsive Full Width for Tablet/Web */
+@media (min-width: 768px) {
+    /* Stretch Content Area */
+    .content-area {
+        max-width: 100% !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
+
+    /* Stretch Navbar and Bottom Bar */
+    .navbar, .bottom-bar {
+        max-width: none !important;
+    }
+
+    /* Adjust Modals */
+    .modal-content {
+        max-width: 600px !important;
+    }
+
+    /* Ensure Splash Screen stretches properly */
+    .splash-screen {
+        max-width: none !important;
+    }
+}
+
+/* Web Desktop: Dynamic Sidebar Shifting (>= 1024px) */
+@media (min-width: 1024px) {
+    /* Transitions for content shifting */
+    .content-area, .navbar, .bottom-bar {
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+                    width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                    margin-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    /* Shift everything when body has sidebar-open class */
+    body.sidebar-open .content-area {
+        margin-left: 280px !important;
+        width: calc(100% - 280px) !important;
+    }
+
+    body.sidebar-open .navbar,
+    body.sidebar-open .bottom-bar {
+        left: 295px !important; /* 280px sidebar + 15px margin */
+        max-width: calc(100% - 310px) !important;
+    }
+
+    /* Dashboard: Show all wallets without scroll */
+    .wallet-container {
+        overflow-x: visible !important;
+        flex-wrap: wrap;
+    }
+    .wallet-card {
+        min-width: 0 !important;
+        flex: 1 !important;
+    }
+
+    /* Web Desktop Adjustments */
+    .sidebar-overlay {
+        display: none !important;
+    }
+    .sidebar {
+        box-shadow: 5px 0 25px rgba(0,0,0,0.05); /* Lighter shadow when docked */
+    }
+    .sidebar-close-btn {
+        display: none !important;
+    }
+
+    /* Filters: Optimized 4-column row for Desktop */
+    .filter-grid-desktop {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 12px !important;
+    }
+    .filter-grid-desktop .card {
+        margin-bottom: 0 !important;
+    }
+    .filter-grid-desktop .card:nth-child(1),
+    .filter-grid-desktop .card:nth-child(2) {
+        flex: 1 !important;
+    }
+    .filter-grid-desktop .card:nth-child(3) {
+        flex: 1.5 !important;
+    }
+    .filter-grid-desktop .card:nth-child(4) {
+        width: 60px !important;
+    }
 }
