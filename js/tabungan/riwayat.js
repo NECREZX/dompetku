@@ -11,7 +11,7 @@ const RiwayatTabungan = {
             <div class="container slide-in">
                 <div class="flex justify-between items-center mb-6">
                     <h2>Riwayat Tabungan</h2>
-                    <button class="btn btn-outline" style="width:auto" onclick="Export.savings()">
+                    <button class="btn btn-primary" style="width:auto" onclick="Export.savings()">
                         <i class="fas fa-file-pdf"></i> Export
                     </button>
                 </div>
@@ -92,7 +92,7 @@ const RiwayatTabungan = {
                                         <td>
                                             <div style="font-size:11px; color:var(--text-muted)">${Format.date(l.date)}</div>
                                             <div style="font-weight:700">${goal ? goal.name : 'Tujuan Dihapus'}</div>
-                                            <div style="font-size:11px; color:var(--text-muted)">${l.note || (isSetor ? 'Setoran' : 'Penarikan')}</div>
+                                            <div style="font-size:11px; color:var(--accent)">${l.note || (isSetor ? 'Setoran' : 'Penarikan')}</div>
                                         </td>
                                         <td style="text-align:right">
                                             <span class="${isSetor ? 'text-success' : 'text-danger'}" style="font-weight:800">
