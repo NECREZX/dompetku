@@ -1,6 +1,6 @@
 /* Cards */
 .card {
-    background: var(--surface);
+    background: var(--surface); /* stays white in light mode */
     border-radius: var(--radius);
     padding: 24px;
     box-shadow: var(--shadow);
@@ -23,7 +23,7 @@
 .card-value {
     font-size: 28px;
     font-weight: 800;
-    color: var(--primary);
+    color: var(--accent); /* Coral for key values */
     line-height: 1;
 }
 
@@ -81,7 +81,8 @@ input, select, textarea {
     border: 1.5px solid var(--border);
     font-family: inherit;
     font-size: 15px;
-    background: #fcfdfe;
+    color: var(--text);
+    background: #f8fefe;
     transition: var(--transition);
 }
 
