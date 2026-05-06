@@ -1,165 +1,148 @@
-.dark-mode {
-    /* Colors - Specialized for Deep Night Theme */
-    --primary: #1e293b;       /* Navy Lighter */
-    --primary-light: #334155;
-    --accent: #3b82f6;
-    --accent-light: #60a5fa;
-    --background: #020617;    /* Deepest Black-Blue */
-    --surface: #0f172a;       /* Card Navy */
-    --text: #f8fafc;          /* Bright White-Gray */
-    --text-muted: #94a3b8;    /* Slate Gray */
-    --border: #1e293b;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    
-    /* Dynamic Overrides */
-    --chart-grid: rgba(255, 255, 255, 0.05);
-}
+/* === DARK MODE: NAVY & PINK BRANDING === */
 
-/* Base Fixes */
-.dark-mode body { 
-    background-color: var(--background); 
-    color: var(--text); 
-}
-
-.dark-mode h1, .dark-mode h2, .dark-mode h3 { 
-    color: #ffffff !important; 
-}
-
-/* Navbar Fix */
-.dark-mode .navbar {
-    background: #1e293b !important;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-}
-
-/* Card & Table Fix */
-.dark-mode .card {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-}
-
-.dark-mode .card-title { color: var(--text-muted); }
-.dark-mode .card-value { color: #ffffff; }
-
-.dark-mode th { 
-    background-color: #1e293b; 
-    color: var(--text-muted); 
-}
-
-.dark-mode tr {
-    border-bottom: 1px solid var(--border);
-}
-
-/* Form Fix (Input & Month Picker) */
-.dark-mode input, 
-.dark-mode select, 
-.dark-mode textarea {
-    background-color: #020617 !important;
-    border: 1.5px solid var(--border) !important;
-    color: #ffffff !important;
-}
-
-.dark-mode input:focus {
+/* Root variables applied to body when .dark-mode is active */
+body.dark-mode {
+    --background: #0f172a;
+    --surface: #1e293b;
+    --bar-bg: #1e293b;
+    --primary: #e8696a;
+    --accent: #e8696a;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #334155;
     background-color: #0f172a !important;
-    border-color: var(--accent) !important;
+    color: #f1f5f9 !important;
 }
 
-.dark-mode label { 
-    color: #cbd5e1 !important; 
+/* Global Content Area Overrides */
+body.dark-mode #appContent,
+body.dark-mode .container,
+body.dark-mode .main-wrapper {
+    background-color: transparent !important;
 }
 
-/* Buttons Fix */
-.dark-mode .btn-primary {
-    background: var(--accent) !important;
+/* Cards & Containers */
+body.dark-mode .card,
+body.dark-mode .modal-content {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Headings & Titles - Pink Coral Accent */
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode .card-title,
+body.dark-mode .modal-title {
+    color: #e8696a !important;
+}
+
+/* NOMINALS (The main priority) */
+/* Income = Green */
+body.dark-mode .text-success,
+body.dark-mode #appContent .text-success,
+body.dark-mode .card-value.text-success {
+    color: #10b981 !important;
+    font-weight: 800 !important;
+}
+
+/* Expense = Pink Coral */
+body.dark-mode .text-danger,
+body.dark-mode #appContent .text-danger,
+body.dark-mode .card-value.text-danger,
+body.dark-mode .text-accent {
+    color: #e8696a !important;
+    font-weight: 800 !important;
+}
+
+/* Neutral Card Values (Balance, etc) = White */
+body.dark-mode .card-value:not(.text-success):not(.text-danger) {
     color: #ffffff !important;
+    font-weight: 800 !important;
 }
 
-.dark-mode .btn-outline {
-    border-color: var(--border) !important;
-    color: #ffffff !important;
+/* Tables & Lists */
+body.dark-mode .table-responsive table {
+    background: transparent !important;
 }
 
-.dark-mode .btn-outline:hover {
+body.dark-mode tr {
+    border-bottom: 1px solid #334155 !important;
+}
+
+body.dark-mode td, 
+body.dark-mode th {
+    color: #f1f5f9 !important;
+    background: transparent !important;
+}
+
+body.dark-mode th {
+    color: #94a3b8 !important;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+/* Form Elements */
+body.dark-mode label,
+body.dark-mode .form-group label {
+    color: #e8696a !important;
+    font-weight: 700 !important;
+}
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    color: #f1f5f9 !important;
+    border-radius: 12px !important;
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus {
+    border-color: #e8696a !important;
+    outline: none !important;
+}
+
+/* Bars (Navbar, Sidebar) */
+body.dark-mode .navbar,
+body.dark-mode .sidebar,
+body.dark-mode .bottom-bar {
     background: #1e293b !important;
 }
 
-/* Component Details */
-.dark-mode .tab-group { background: #020617; }
-.dark-mode .tab-btn.active { background: #1e293b; color: var(--accent-light); }
-
-.dark-mode .nav-btn { 
-    background: rgba(255, 255, 255, 0.05) !important; 
-    color: #ffffff !important; 
+body.dark-mode .sidebar-item {
+    color: #f1f5f9 !important;
 }
 
-.dark-mode .bottom-bar { 
-    background: #0f172a; 
-    border-top: 1px solid #1e293b; 
-}
-
-.dark-mode .nav-item { color: #64748b; }
-.dark-mode .nav-item.active { color: var(--accent-light); }
-
-.dark-mode .modal-content { 
-    background: #0f172a; 
-    border: 1px solid #1e293b; 
-}
-
-/* Color Success/Danger Tweak for Dark Mode visibility */
-.dark-mode .text-success { color: #34d399 !important; }
-.dark-mode .text-danger { color: #fb7185 !important; }
-.dark-mode .text-warning { color: #facc15 !important; }
-.dark-mode .text-primary { color: #ffffff !important; }
-.dark-mode .text-accent { color: var(--accent-light) !important; }
-
-/* Activity Dashboard Stats */
-.dark-mode .card div[style*="color: var(--primary)"] {
+body.dark-mode .sidebar-item.active {
+    background: #e8696a !important;
     color: #ffffff !important;
 }
 
-/* Timeline & Tables */
-.dark-mode div[style*="background: #fcfdfe"] {
-    background: #1e293b !important;
-    border-bottom-color: var(--border) !important;
-}
-
-.dark-mode .table-responsive table td {
-    color: var(--text-muted);
-}
-
-.dark-mode .table-responsive table td div[style*="color: var(--primary)"] {
+/* Scroll to Top */
+body.dark-mode .scroll-to-top {
+    background: #e8696a !important;
     color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(232, 105, 106, 0.4) !important;
 }
 
-/* SweetAlert Dark Mode Fix */
-.dark-mode .swal2-popup {
-    background-color: #0f172a !important;
-    color: #f8fafc !important;
-    border: 1px solid #1e293b;
-}
-
-.dark-mode .swal2-title, 
-.dark-mode .swal2-html-container {
-    color: #f8fafc !important;
-}
-
-.dark-mode .swal2-html-container div[style*="background: #f8fafc"] {
+/* SweetAlert2 */
+body.dark-mode .swal2-popup {
     background: #1e293b !important;
-    color: #f8fafc !important;
-    border-left-color: var(--accent) !important;
+    color: #f1f5f9 !important;
+    border: 1px solid #334155 !important;
 }
 
-.dark-mode .swal2-close {
-    color: var(--text-muted) !important;
+body.dark-mode .swal2-title,
+body.dark-mode .swal2-content {
+    color: #f1f5f9 !important;
 }
 
-.dark-mode .swal2-timer-progress-bar {
-    background: var(--accent) !important;
-}
-
-/* Scroll to Top Dark Mode */
-.dark-mode .scroll-to-top {
-    background: #334155 !important;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-right: none;
+/* Charts */
+body.dark-mode #navbarClock {
+    color: #ffffff !important;
 }
