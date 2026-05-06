@@ -209,8 +209,16 @@ const DashboardKeuangan = {
 
 const Transaksi = {
     currentType: 'pengeluaran',
+    filters: {
+        type: 'semua',
+        search: '',
+        month: '',
+        wallet: 'semua'
+    },
+    expandedDates: new Set(),
 
     render(container) {
+        const wallets = Storage.get(Storage.KEYS.DOMPET) || [];
         container.innerHTML = `
             <div class="container slide-in">
                 <div class="flex justify-between items-center mb-6">
@@ -222,9 +230,89 @@ const Transaksi = {
 
                 <br>
 
+                <div class="form-group mb-4">
+                    <input type="text" id="trx-filter-search" value="${this.filters.search}" placeholder="Cari judul atau catatan transaksi..." oninput="Transaksi.updateFilters()" style="padding: 14px 16px; border-radius: 16px; width: 100%; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+                </div>
+
+                <div class="flex gap-3 mb-3">
+                    <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
+                        <label style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:8px; display:block">Dompet</label>
+                        <select id="trx-filter-wallet" onchange="Transaksi.updateFilters()" style="width: 100%; border: none; background: transparent; padding: 0; outline: none; font-weight: 600; font-size: 14px; color: var(--text);">
+                            <option value="semua" ${this.filters.wallet === 'semua' ? 'selected' : ''}>Semua Dompet</option>
+                            ${wallets.map(w => `<option value="${w.id}" ${this.filters.wallet === w.id ? 'selected' : ''}>${w.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
+                        <label style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:8px; display:block">Tipe</label>
+                        <select id="trx-filter-type" onchange="Transaksi.updateFilters()" style="width: 100%; border: none; background: transparent; padding: 0; outline: none; font-weight: 600; font-size: 14px; color: var(--text);">
+                            <option value="semua" ${this.filters.type === 'semua' ? 'selected' : ''}>Semua Tipe</option>
+                            <option value="pemasukan" ${this.filters.type === 'pemasukan' ? 'selected' : ''}>Pemasukan</option>
+                            <option value="pengeluaran" ${this.filters.type === 'pengeluaran' ? 'selected' : ''}>Pengeluaran</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div class="flex gap-3 mb-6">
+                    <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
+                        <label style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:8px; display:block">Waktu</label>
+                        <div style="position: relative; width: 100%; display: flex; align-items: center; height: 20px;">
+                            <div style="position: absolute; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: none; z-index: 1;">
+                                <span style="color: ${this.filters.month ? 'var(--text)' : 'var(--text-muted)'}; font-weight: 600; font-size: 14px;">
+                                    ${this.filters.month || 'Semua Waktu'}
+                                </span>
+                                <i class="fas fa-calendar" style="color: var(--text-muted);"></i>
+                            </div>
+                            <input type="month" id="trx-filter-month" value="${this.filters.month}" onchange="Transaksi.updateFilters()" style="width: 100%; height: 100%; opacity: 0; border: none; padding: 0; margin: 0; cursor: pointer; position: relative; z-index: 2;">
+                        </div>
+                    </div>
+                    <div class="card" style="width: 60px; flex-shrink: 0; margin-bottom: 0; padding: 12px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="Transaksi.resetFilters()">
+                        <i class="fas fa-undo" style="color: var(--danger); font-size: 16px;"></i>
+                    </div>
+                </div>
+
+                <br>
+                <br>
+
                 <div id="transaksi-list"></div>
             </div>
         `;
+        this.renderList();
+    },
+
+    updateFilters() {
+        this.filters.search = document.getElementById('trx-filter-search').value.toLowerCase();
+        this.filters.type = document.getElementById('trx-filter-type').value;
+        this.filters.month = document.getElementById('trx-filter-month').value;
+        this.filters.wallet = document.getElementById('trx-filter-wallet').value;
+        this.expandedDates.clear();
+        this.renderList();
+    },
+
+    resetFilters() {
+        this.filters = { type: 'semua', search: '', month: '', wallet: 'semua' };
+        this.expandedDates.clear();
+        this.render(document.getElementById('appContent'));
+    },
+
+    getFilteredData() {
+        let trx = Storage.get(Storage.KEYS.TRANSAKSI);
+        if (this.filters.type !== 'semua') trx = trx.filter(t => t.type === this.filters.type);
+        if (this.filters.wallet !== 'semua') trx = trx.filter(t => t.walletId === this.filters.wallet);
+        if (this.filters.search) trx = trx.filter(t => t.title.toLowerCase().includes(this.filters.search));
+        if (this.filters.month) trx = trx.filter(t => t.date.startsWith(this.filters.month));
+        return trx.sort((a,b) => {
+            const dateDiff = new Date(b.date) - new Date(a.date);
+            if (dateDiff !== 0) return dateDiff;
+            return b.id - a.id;
+        });
+    },
+
+    toggleExpand(date) {
+        if (this.expandedDates.has(date)) {
+            this.expandedDates.delete(date);
+        } else {
+            this.expandedDates.add(date);
+        }
         this.renderList();
     },
 
@@ -330,7 +418,7 @@ const Transaksi = {
 
     renderList() {
         const container = document.getElementById('transaksi-list');
-        const trx = Storage.get(Storage.KEYS.TRANSAKSI).sort((a,b) => new Date(b.date) - new Date(a.date));
+        const trx = this.getFilteredData();
         const wallets = Storage.get(Storage.KEYS.DOMPET);
         
         if (trx.length === 0) {
@@ -338,52 +426,73 @@ const Transaksi = {
             return;
         }
 
-        container.innerHTML = `
-            <div class="card" style="padding: 0; overflow: hidden;">
-                <div class="table-responsive">
-                    <table style="border-collapse: collapse;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid var(--border)">
-                                <th>Keterangan</th>
-                                <th style="text-align:right">Jumlah</th>
-                                <th style="width:100px">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${trx.map(t => {
-                                const isIncome = t.type === 'pemasukan';
-                                const wallet = wallets.find(w => w.id === t.walletId);
-                                return `
-                                    <tr style="border-bottom: 1px solid var(--border)">
-                                        <td>
-                                            <div style="font-weight:700">${t.title}</div>
-                                            <div style="font-size:11px; color:var(--text-muted)">
-                                                <i class="fas ${wallet ? wallet.icon : 'fa-wallet'}"></i> ${wallet ? wallet.name : 'Unknown'} • ${Format.date(t.date)}
-                                            </div>
-                                        </td>
-                                        <td style="text-align:right">
-                                            <span class="${isIncome ? 'text-success' : 'text-danger'}" style="font-weight:800">
-                                                ${isIncome ? '+' : '-'}${Format.rupiah(t.amount)}
-                                            </span>
-                                        </td>
-                                        <td style="text-align:right">
-                                            <div class="flex gap-2 justify-end">
-                                                <button class="nav-btn" style="width:32px; height:32px; background:var(--background)" onclick="Transaksi.showAddModal('${t.id}')">
-                                                    <i class="fas fa-edit" style="color:var(--accent)"></i>
-                                                </button>
-                                                <button class="nav-btn" style="width:32px; height:32px; background:var(--background)" onclick="Transaksi.delete('${t.id}')">
-                                                    <i class="fas fa-trash" style="color:var(--danger)"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `;
-                            }).join('')}
-                        </tbody>
-                    </table>
+        const grouped = {};
+        trx.forEach(t => {
+            if (!grouped[t.date]) grouped[t.date] = [];
+            grouped[t.date].push(t);
+        });
+
+        const sortedDates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a));
+
+        container.innerHTML = sortedDates.map(date => {
+            const dateTrx = grouped[date];
+            const isExpanded = this.expandedDates.has(date);
+            const displayedTrx = isExpanded ? dateTrx : dateTrx.slice(0, 3);
+            const hasMore = dateTrx.length > 3;
+
+            return `
+                <div class="mb-6">
+                    <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px; padding-left:4px">
+                        ${Format.date(date)}
+                    </div>
+                    <div class="card" style="padding: 0; overflow: hidden;">
+                        <div class="table-responsive">
+                            <table style="border-collapse: collapse; margin-bottom: 0;">
+                                <tbody>
+                                    ${displayedTrx.map(t => {
+                                        const isIncome = t.type === 'pemasukan';
+                                        const wallet = wallets.find(w => w.id === t.walletId);
+                                        return `
+                                            <tr style="border-bottom: 1px solid var(--border)">
+                                                <td>
+                                                    <div style="font-weight:700">${t.title}</div>
+                                                    <div style="font-size:11px; color:var(--text-muted)">
+                                                        <i class="fas ${wallet ? wallet.icon : 'fa-wallet'}"></i> ${wallet ? wallet.name : 'Unknown'}
+                                                    </div>
+                                                </td>
+                                                <td style="text-align:right">
+                                                    <span class="${isIncome ? 'text-success' : 'text-danger'}" style="font-weight:800">
+                                                        ${isIncome ? '+' : '-'}${Format.rupiah(t.amount)}
+                                                    </span>
+                                                </td>
+                                                <td style="text-align:right; width: 90px;">
+                                                    <div class="flex gap-2 justify-end">
+                                                        <button class="nav-btn" style="width:32px; height:32px; background:var(--background)" onclick="Transaksi.showAddModal('${t.id}')">
+                                                            <i class="fas fa-edit" style="color:var(--accent)"></i>
+                                                        </button>
+                                                        <button class="nav-btn" style="width:32px; height:32px; background:var(--background)" onclick="Transaksi.delete('${t.id}')">
+                                                            <i class="fas fa-trash" style="color:var(--danger)"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                            ${hasMore ? `
+                                <div style="padding: 12px; text-align: center; border-top: 1px solid var(--border); background: var(--background)">
+                                    <button onclick="Transaksi.toggleExpand('${date}')" style="background: none; border: none; color: var(--accent); font-weight: 700; font-size: 13px; cursor: pointer;">
+                                        ${isExpanded ? 'Sembunyikan' : `Lihat Semua (${dateTrx.length} Transaksi)`}
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        `;
+                <br>
+            `;
+        }).join('');
     },
 
     delete(id) {
