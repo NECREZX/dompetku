@@ -11,6 +11,12 @@ const App = {
         this.checkNotifications();
         this.startReminderChecker();
 
+        // Auto open sidebar on Web Desktop (>= 1024px)
+        if (window.innerWidth >= 1024) {
+            document.getElementById('sidebar').classList.add('open');
+            document.body.classList.add('sidebar-open');
+        }
+
         // Hide Splash Screen
         setTimeout(() => {
             const splash = document.getElementById('splashScreen');
@@ -77,17 +83,25 @@ const App = {
         const overlay = document.getElementById('sidebarOverlay');
         
         document.getElementById('sidebarToggle').addEventListener('click', () => {
-            sidebar.classList.add('open');
-            overlay.classList.add('visible');
+            const isOpen = sidebar.classList.toggle('open');
+            if (isOpen) {
+                document.body.classList.add('sidebar-open');
+                overlay.classList.add('visible');
+            } else {
+                document.body.classList.remove('sidebar-open');
+                overlay.classList.remove('visible');
+            }
         });
 
         document.getElementById('closeSidebar').addEventListener('click', () => {
             sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
             overlay.classList.remove('visible');
         });
 
         overlay.addEventListener('click', () => {
             sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
             overlay.classList.remove('visible');
         });
 
@@ -95,15 +109,23 @@ const App = {
             item.addEventListener('click', () => {
                 const module = item.dataset.module;
                 this.switchModule(module);
-                sidebar.classList.remove('open');
-                overlay.classList.remove('visible');
+                
+                // Only close on mobile/tablet (less than 1024px)
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.remove('open');
+                    document.body.classList.remove('sidebar-open');
+                    overlay.classList.remove('visible');
+                }
             });
         });
 
         document.querySelector('.user-profile').addEventListener('click', () => {
             UI.showProfileEdit();
-            sidebar.classList.remove('open');
-            overlay.classList.remove('visible');
+            if (window.innerWidth < 1024) {
+                sidebar.classList.remove('open');
+                document.body.classList.remove('sidebar-open');
+                overlay.classList.remove('visible');
+            }
         });
     },
 
