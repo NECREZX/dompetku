@@ -10,7 +10,7 @@ const DashboardAktivitas = {
                 </div>
 
                 <div class="card balance-card" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; margin-bottom: 24px; padding: 28px;">
-                    <div class="card-title" style="color: rgba(255,255,255,0.7); font-size: 11px;">Total Aktivitas Terdaftar</div>
+                    <div class="card-title" style="color: white; font-size: 11px;">Total Aktivitas Terdaftar</div>
                     <div class="card-value" style="color: white; font-size: 34px;">${data.totalNotes + data.stats.reminders}</div>
                 </div>
 
