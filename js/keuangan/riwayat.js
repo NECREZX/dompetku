@@ -24,39 +24,45 @@ const RiwayatKeuangan = {
                     <input type="text" id="filter-search" value="${this.filters.search}" placeholder="Cari judul atau catatan transaksi..." oninput="RiwayatKeuangan.updateFilters()" style="padding: 14px 16px; border-radius: 16px; width: 100%; border: 1px solid var(--border); background: var(--background); color: var(--text);">
                 </div>
 
-                <div class="flex gap-3 mb-3">
-                    <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
-                        <label style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:8px; display:block">Dompet</label>
-                        <select id="filter-wallet" onchange="RiwayatKeuangan.updateFilters()" style="width: 100%; border: none; background: transparent; padding: 0; outline: none; font-weight: 600; font-size: 14px; color: var(--text);">
-                            <option value="semua" ${this.filters.wallet === 'semua' ? 'selected' : ''}>Semua Dompet</option>
-                            ${wallets.map(w => `<option value="${w.id}" ${this.filters.wallet === w.id ? 'selected' : ''}>${w.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
-                        <label style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:8px; display:block">Tipe</label>
-                        <select id="filter-type" onchange="RiwayatKeuangan.updateFilters()" style="width: 100%; border: none; background: transparent; padding: 0; outline: none; font-weight: 600; font-size: 14px; color: var(--text);">
-                            <option value="semua" ${this.filters.type === 'semua' ? 'selected' : ''}>Semua Tipe</option>
-                            <option value="pemasukan" ${this.filters.type === 'pemasukan' ? 'selected' : ''}>Pemasukan</option>
-                            <option value="pengeluaran" ${this.filters.type === 'pengeluaran' ? 'selected' : ''}>Pengeluaran</option>
-                        </select>
-                    </div>
-                </div>
-                <br>
-                <div class="flex gap-3 mb-6">
-                    <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
-                        <label style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:8px; display:block">Waktu</label>
-                        <div style="position: relative; width: 100%; display: flex; align-items: center; height: 20px;">
-                            <div style="position: absolute; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: none; z-index: 1;">
-                                <span style="color: ${this.filters.month ? 'var(--text)' : 'var(--text-muted)'}; font-weight: 600; font-size: 14px;">
-                                    ${this.filters.month || 'Semua Waktu'}
-                                </span>
-                                <i class="fas fa-calendar" style="color: var(--text-muted);"></i>
-                            </div>
-                            <input type="month" id="filter-month" value="${this.filters.month}" onchange="RiwayatKeuangan.updateFilters()" style="width: 100%; height: 100%; opacity: 0; border: none; padding: 0; margin: 0; cursor: pointer; position: relative; z-index: 2;">
+                <div class="filter-grid-desktop">
+                    <div class="flex gap-3 mb-3" style="flex: 1">
+                        <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
+                            <label style="font-size:11px; font-weight:700; 
+ margin-bottom:8px; display:block">Dompet</label>
+                            <select id="filter-wallet" onchange="RiwayatKeuangan.updateFilters()" style="width: 100%; border: none; background: transparent; padding: 0; outline: none; font-weight: 600; font-size: 14px; color: var(--accent);">
+                                <option value="semua" ${this.filters.wallet === 'semua' ? 'selected' : ''}>Semua Dompet</option>
+                                ${wallets.map(w => `<option value="${w.id}" ${this.filters.wallet === w.id ? 'selected' : ''}>${w.name}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
+                            <label style="font-size:11px; font-weight:700; 
+ margin-bottom:8px; display:block">Tipe</label>
+                            <select id="filter-type" onchange="RiwayatKeuangan.updateFilters()" style="width: 100%; border: none; background: transparent; padding: 0; outline: none; font-weight: 600; font-size: 14px; color: var(--accent);">
+                                <option value="semua" ${this.filters.type === 'semua' ? 'selected' : ''}>Semua Tipe</option>
+                                <option value="pemasukan" ${this.filters.type === 'pemasukan' ? 'selected' : ''}>Pemasukan</option>
+                                <option value="pengeluaran" ${this.filters.type === 'pengeluaran' ? 'selected' : ''}>Pengeluaran</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="card" style="width: 60px; flex-shrink: 0; margin-bottom: 0; padding: 12px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="RiwayatKeuangan.resetFilters()">
-                        <i class="fas fa-undo" style="color: var(--danger); font-size: 16px;"></i>
+                    <br>
+                    <div class="flex gap-3 mb-6" style="flex: 1">
+                        <div class="card" style="flex: 1; margin-bottom: 0; padding: 12px 16px; border: 1px solid var(--border); min-width: 0;">
+                            <label style="font-size:11px; font-weight:700; 
+ margin-bottom:8px; display:block">Waktu</label>
+                            <div style="position: relative; width: 100%; display: flex; align-items: center; height: 20px;">
+                                <div style="position: absolute; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: none; z-index: 1;">
+                                    <span style="color: ${this.filters.month ? 'var(--text)' : 'var(--accent)'}; font-weight: 600; font-size: 14px;">
+                                        ${this.filters.month || 'Semua Waktu'}
+                                    </span>
+                                    <i class="fas fa-calendar" style="
+"></i>
+                                </div>
+                                <input type="month" id="filter-month" value="${this.filters.month}" onchange="RiwayatKeuangan.updateFilters()" style="width: 100%; height: 100%; opacity: 0; border: none; padding: 0; margin: 0; cursor: pointer; position: relative; z-index: 2;">
+                            </div>
+                        </div>
+                        <div class="card" style="width: 60px; flex-shrink: 0; margin-bottom: 0; padding: 12px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="RiwayatKeuangan.resetFilters()">
+                            <i class="fas fa-undo" style="color: var(--danger); font-size: 16px;"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -152,10 +158,11 @@ const RiwayatKeuangan = {
             return `
                 <div class="mb-6">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-left:4px; padding-right:4px;">
-                        <div style="font-size:12px; font-weight:700; color:var(--text-muted);">
+                        <div style="font-size:12px; font-weight:700; 
+">
                             ${Format.date(date)}
                         </div>
-                        <div style="font-size:12px; font-weight:800; color:${dailyTotal >= 0 ? 'var(--success)' : 'var(--danger)'};">
+                        <div class="card-value ${dailyTotal >= 0 ? 'text-success' : 'text-danger'}" style="font-size:12px;">
                             ${dailyTotal >= 0 ? '+' : '-'}${Format.rupiah(Math.abs(dailyTotal))}
                         </div>
                     </div>
@@ -178,7 +185,7 @@ const RiwayatKeuangan = {
                                             <tr>
                                                 <td>
                                                     <div style="font-weight:700">${t.title}</div>
-                                                    <div style="font-size:11px; color:var(--text-muted)">${subLabel}</div>
+                                                    <div style="font-size:11px; color:var(--accent)">${subLabel}</div>
                                                 </td>
                                                 <td style="text-align:right">
                                                     <div class="${isIncome ? 'text-success' : 'text-danger'}" style="font-weight:800">
