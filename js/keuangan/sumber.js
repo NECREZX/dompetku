@@ -59,7 +59,8 @@ const SumberKategori = {
                                             ${this.activeTab === 'dompet' ? `<i class="fas ${item.icon || 'fa-wallet'}" style="color:var(--accent); font-size: 18px;"></i>` : ''}
                                             <div>
                                                 <div style="font-weight:700">${item.name}</div>
-                                                ${this.activeTab === 'dompet' ? `<div style="font-size:11px; color:var(--text-muted)">Saldo Awal: ${Format.rupiah(item.balance || 0)}</div>` : ''}
+                                                ${this.activeTab === 'dompet' ? `<div style="font-size:11px; 
+">Saldo Awal: ${Format.rupiah(item.balance || 0)}</div>` : ''}
                                             </div>
                                         </div>
                                     </td>
