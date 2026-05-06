@@ -1,13 +1,15 @@
+/* === SIDEBAR — 30% Deep Teal === */
 .sidebar {
     position: fixed;
     top: 0;
     left: -280px;
     width: 280px;
     height: 100vh;
-    background: var(--primary); /* Full Navy */
+    background: var(--bar-bg); /* 30% Deep Teal */
+    border-right: none;
     z-index: 2000;
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 15px 0 50px rgba(0,0,0,0.3);
+    box-shadow: 15px 0 50px rgba(0, 0, 0, 0.3);
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -23,12 +25,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1500;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
 }
 
 .sidebar-overlay.visible {
@@ -48,35 +50,34 @@
 .sidebar-close-btn {
     position: absolute;
     right: 5px;
-    top: 26px; /* Precisely aligned with navbar toggle */
+    top: 26px;
     width: 42px;
     height: 42px;
-    background: none;
+    background: transparent;
     border: none;
+    box-shadow: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 100;
-    opacity: 0.6;
 }
 
 .sidebar-close-btn:hover {
-    opacity: 1;
-    color: var(--accent) !important;
+    color: #ffffff;
 }
 
 .sidebar-close-btn i {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .sidebar-logo {
     display: flex;
     align-items: center;
     gap: 15px;
-    color: white;
+    color: #ffffff;
     font-size: 22px;
     font-weight: 800;
     letter-spacing: -0.5px;
@@ -85,20 +86,24 @@
 .logo-icon {
     width: 42px;
     height: 42px;
-    background: linear-gradient(135deg, var(--accent), #1e40af);
     border-radius: 12px;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .sidebar-label {
     padding: 0 24px;
     font-size: 11px;
     font-weight: 800;
-    color: rgba(255,255,255,0.3);
+    color: rgba(255, 255, 255, 0.6) !important;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 15px;
@@ -110,56 +115,58 @@
     padding: 0 16px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
 .sidebar-item {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 14px 16px;
-    border-radius: 14px;
-    color: rgba(255, 255, 255, 0.6);
+    padding: 13px 16px;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.85) !important; /* Always white */
     background: transparent;
     border: none;
     width: 100%;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
     text-align: left;
 }
 
 .sidebar-item i {
     font-size: 18px;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.7) !important;
     transition: inherit;
+    width: 20px;
+    text-align: center;
 }
 
 .sidebar-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff !important;
 }
 
 .sidebar-item:hover i {
-    color: var(--accent);
+    color: #ffffff !important;
 }
 
 .sidebar-item.active {
-    background: rgba(59, 130, 246, 0.15);
-    color: white;
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    background: var(--accent);
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(232, 105, 106, 0.4);
 }
 
 .sidebar-item.active i {
-    color: var(--accent);
+    color: #ffffff !important;
 }
 
 /* Footer & Profile */
 .sidebar-footer {
-    padding: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(0, 0, 0, 0.1);
+    padding: 20px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bar-bg); /* Matches sidebar exactly */
 }
 
 .user-profile {
@@ -173,14 +180,28 @@
 }
 
 .user-profile:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
 }
 
-.user-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+.user-profile img,
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.user-avatar {
+    background: var(--accent); /* Coral — 10% accent */
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.5px;
 }
 
 .user-info {
@@ -188,14 +209,22 @@
 }
 
 .user-name {
-    color: white;
+    color: #ffffff;
     font-size: 14px;
     font-weight: 700;
 }
 
 .user-rank {
-    color: rgba(255,255,255,0.5);
+    color: rgba(255, 255, 255, 0.5);
     font-size: 11px;
 }
 
-
+/* Web Desktop Adjustments */
+@media (min-width: 1024px) {
+    .sidebar-overlay {
+        display: none !important;
+    }
+    .sidebar {
+        box-shadow: 5px 0 25px rgba(0,0,0,0.1);
+    }
+}
