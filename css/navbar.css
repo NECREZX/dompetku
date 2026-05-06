@@ -1,21 +1,20 @@
 .navbar {
     position: fixed;
-    top: 15px; /* Margin from top */
+    top: 15px;
     left: 15px;
     right: 15px;
     height: 64px;
-    background: var(--primary); /* Deep Navy */
+    background: var(--bar-bg); /* 30% Deep Teal */
     border-radius: var(--radius-pill);
     z-index: 1000;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Added */
+    justify-content: space-between;
     padding: 0 15px;
-    box-shadow: var(--shadow-lg);
-    max-width: 470px; /* Container aligned */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 470px;
     margin: 0 auto;
 }
-
 
 .logo {
     display: flex;
@@ -23,7 +22,7 @@
     gap: 10px;
     font-size: 18px;
     font-weight: 800;
-    color: white;
+    color: #ffffff;
 }
 
 .logo i {
@@ -31,10 +30,10 @@
 }
 
 .nav-btn {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
     border: none;
     font-size: 18px;
-    color: white;
+    color: #ffffff;
     cursor: pointer;
     width: 42px;
     height: 42px;
@@ -47,9 +46,8 @@
 }
 
 .nav-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.22);
 }
-
 
 .badge {
     position: absolute;
@@ -57,9 +55,9 @@
     right: 5px;
     width: 8px;
     height: 8px;
-    background: var(--danger);
+    background: var(--accent);
     border-radius: 50%;
-    border: 2px solid var(--surface);
+    border: 2px solid var(--bar-bg);
 }
 
 .nav-right {
