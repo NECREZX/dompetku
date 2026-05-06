@@ -95,7 +95,7 @@ const RiwayatAktivitas = {
             <div class="card mb-6" style="padding: 20px;">
                 <div class="flex justify-between items-center mb-4">
                     <h3 style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-file-pen text-accent"></i> Tabel Catatan
+                        <i class="fas fa-file-pen"></i> Tabel Catatan
                     </h3>
                     ${notes.length > 3 ? `<button class="btn-text" onclick="RiwayatAktivitas.toggleNotes()" style="font-size: 12px; color: var(--accent); background: none; border: none; cursor: pointer; font-weight: 700;">${this.showAllNotes ? 'Sembunyikan' : 'Lihat Semua'}</button>` : ''}
                 </div>
