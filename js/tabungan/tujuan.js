@@ -11,19 +11,19 @@ const DashboardTabungan = {
                 </div>
                 
                 <div class="card balance-card" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; margin-bottom: 24px;">
-                    <div class="card-title" style="color: rgba(255,255,255,0.7)">Total Dana Terkumpul</div>
+                    <div class="card-title" style="color: white;">Total Dana Terkumpul</div>
                     <div class="card-value" style="color: white; font-size: 32px;">${Format.rupiah(data.totalCollected)}</div>
                 </div>
 
                 <div class="flex gap-4 mb-8">
                     <div class="card" style="flex:1; margin-bottom:0; padding: 20px; border: 1px solid var(--border);">
-                        <div class="card-title">Target Total</div>
-                        <div class="card-value" style="font-size:18px">${Format.rupiah(data.totalTarget)}</div>
+                        <div class="card-title" style="color: var(--accent);">Target Total</div>
+                        <div class="card-value" style="font-size:18px; color: var(--text-muted);">${Format.rupiah(data.totalTarget)}</div>
                     </div>
 
                     <div class="card" style="flex:1; margin-bottom:0; padding: 20px;">
-                        <div class="card-title">Progress</div>
-                        <div class="card-value" style="font-size:18px; color: var(--accent)">${data.overallProgress}%</div>
+                        <div class="card-title" style="color: var(--accent);">Progress</div>
+                        <div class="card-value" style="font-size:18px; color: var(--text-muted)">${data.overallProgress}%</div>
                     </div>
                 </div>
 
@@ -210,7 +210,7 @@ const TujuanTabungan = {
 
                     <div class="flex gap-3 mt-6">
                         <button class="btn btn-primary" style="flex:1" onclick="KelolaTabungan.showActionModal('${g.id}', 'setor')">Setor</button>
-                        <button class="btn btn-danger" style="flex:1"  onclick="KelolaTabungan.showActionModal('${g.id}', 'tarik')">Tarik</button>
+                        <button class="btn btn-danger" style="flex:1; background: var(--text-muted); color: white;"  onclick="KelolaTabungan.showActionModal('${g.id}', 'tarik')">Tarik</button>
                     </div>
                 </div>
             `;
