@@ -47,9 +47,6 @@ const Storage = {
         this.set(this.KEYS.NOTIF, notifs);
         UI.updateNotifBadge(notifs.length);
         
-        // Real-time toast feedback
-        UI.showToast(`${title}: ${desc}`);
-
         // System notification (Pop-up OS)
         UI.sendSystemNotif(title, desc);
         
