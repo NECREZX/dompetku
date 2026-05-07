@@ -16,10 +16,17 @@ const Theme = {
         
         if (theme === 'dark') {
             body.classList.add('dark-mode');
-            icon.className = 'fas fa-sun';
+            body.classList.remove('light-mode');
+            if (icon) icon.className = 'fas fa-sun';
         } else {
+            body.classList.add('light-mode');
             body.classList.remove('dark-mode');
-            icon.className = 'fas fa-moon';
+            if (icon) icon.className = 'fas fa-moon';
+        }
+
+        // Trigger re-render instan jika aplikasi sudah inisialisasi (preserve scroll)
+        if (typeof App !== 'undefined' && App.loadContent) {
+            App.loadContent(true);
         }
     }
 };
