@@ -46,6 +46,8 @@ body.dark-mode #appContent .text-success,
 body.dark-mode .card-value.text-success {
     color: #10b981 !important;
     font-weight: 800 !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 1.1em;
 }
 
 /* Expense = Pink Coral */
@@ -55,12 +57,16 @@ body.dark-mode .card-value.text-danger,
 body.dark-mode .text-accent {
     color: #e8696a !important;
     font-weight: 800 !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 1.1em;
 }
 
 /* Neutral Card Values (Balance, etc) = White */
 body.dark-mode .card-value:not(.text-success):not(.text-danger) {
     color: #ffffff !important;
     font-weight: 800 !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 1.2em;
 }
 
 /* Tables & Lists */
