@@ -254,37 +254,60 @@ const Widgets = {
         navigator.geolocation.getCurrentPosition(async (pos) => {
             const { latitude, longitude } = pos.coords;
             
-            // 1. Get City Name (Nominatim via Alternative Proxy)
+            // 1. Get City Name (Nominatim)
             try {
                 const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
-                const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+                // Coba akses langsung dulu, Nominatim kadang mengizinkan jika dari browser
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('Direct fetch failed');
                 const data = await res.json();
-                const city = data.address.city || data.address.town || data.address.suburb || 'Lokasi Terdeteksi';
-                const locEl = document.getElementById('sb-location');
-                if (locEl) locEl.innerText = city;
+                
+                if (data && data.address) {
+                    const city = data.address.city || data.address.town || data.address.suburb || data.address.village || 'Lokasi Terdeteksi';
+                    const locEl = document.getElementById('sb-location');
+                    if (locEl) locEl.innerText = city;
+                }
             } catch (e) {
-                console.error('Location error:', e);
-                const locEl = document.getElementById('sb-location');
-                if (locEl) locEl.innerText = 'Lokasi Terdeteksi';
+                console.warn('Location direct fetch failed, trying proxy...', e);
+                try {
+                    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+                    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+                    const json = await res.json();
+                    const data = JSON.parse(json.contents);
+                    
+                    if (data && data.address) {
+                        const city = data.address.city || data.address.town || data.address.suburb || 'Lokasi Terdeteksi';
+                        const locEl = document.getElementById('sb-location');
+                        if (locEl) locEl.innerText = city;
+                    }
+                } catch (proxyError) {
+                    console.error('All location attempts failed:', proxyError);
+                    const locEl = document.getElementById('sb-location');
+                    if (locEl) locEl.innerText = 'Lokasi Terdeteksi';
+                }
             }
 
-            // 2. Get Weather (Open-Meteo via Alternative Proxy)
+            // 2. Get Weather (Open-Meteo - No Proxy Needed)
             try {
                 const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
-                const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('Weather fetch failed');
                 const data = await res.json();
-                const temp = Math.round(data.current_weather.temperature);
-                const code = data.current_weather.weathercode;
                 
-                let desc = 'Cerah';
-                if (code > 0 && code <= 3) desc = 'Berawan';
-                else if (code >= 45 && code <= 48) desc = 'Berkabut';
-                else if (code >= 51 && code <= 67) desc = 'Gerimis';
-                else if (code >= 71 && code <= 82) desc = 'Hujan';
-                else if (code >= 95) desc = 'Badai';
+                if (data && data.current_weather) {
+                    const temp = Math.round(data.current_weather.temperature);
+                    const code = data.current_weather.weathercode;
+                    
+                    let desc = 'Cerah';
+                    if (code > 0 && code <= 3) desc = 'Berawan';
+                    else if (code >= 45 && code <= 48) desc = 'Berkabut';
+                    else if (code >= 51 && code <= 67) desc = 'Gerimis';
+                    else if (code >= 71 && code <= 82) desc = 'Hujan';
+                    else if (code >= 95) desc = 'Badai';
 
-                const weatherEl = document.getElementById('sb-weather');
-                if (weatherEl) weatherEl.innerText = `${temp}°C, ${desc}`;
+                    const weatherEl = document.getElementById('sb-weather');
+                    if (weatherEl) weatherEl.innerText = `${temp}°C, ${desc}`;
+                }
             } catch (e) {
                 console.error('Weather error:', e);
                 const weatherEl = document.getElementById('sb-weather');
