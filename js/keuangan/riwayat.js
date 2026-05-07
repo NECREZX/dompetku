@@ -13,7 +13,7 @@ const RiwayatKeuangan = {
             <div class="container slide-in">
                 <div class="flex justify-between items-center mb-6">
                     <h2>Riwayat Transaksi</h2>
-                    <button class="btn btn-primary" style="width:auto" onclick="RiwayatKeuangan.handleExport()">
+                    <button class="btn btn-primary" style="width:auto; padding: 10px 20px" onclick="RiwayatKeuangan.handleExport()">
                         <i class="fas fa-file-pdf"></i> Export
                     </button>
                 </div>
