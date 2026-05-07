@@ -8,23 +8,30 @@ const DashboardKeuangan = {
         container.innerHTML = `
             <div class="container slide-in">
                 <div class="flex justify-between items-center mb-6">
+                <div>
                     <h2 style="font-size:24px">Dashboard Keuangan</h2>
+                </div>
                 </div>
 
                 <!-- 1. Global Balance Card -->
-                <div class="card balance-card" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; margin-bottom: 24px; box-shadow: 0 10px 20px rgba(232, 105, 106, 0.3);">
-                    <div class="card-title" style="color: white; font-size: 11px;">Total Saldo Tersedia</div>
+                <div class="card balance-card" style="background: #b07840; color: white; border: none; margin-bottom: 24px; padding: 28px; box-shadow: 0 10px 30px rgba(176, 120, 64, 0.3);">
+                    <div class="card-title" style="color: rgba(255, 255, 255, 0.7); font-size: 11px;">Total Dana Terkumpul</div>
+
+
                     <div class="card-value" style="color: white; font-size: 34px;">${Format.rupiah(data.totalSaldo || 0)}</div>
                 </div>
+
 
                 <!-- 2. Quick Summary Cards -->
                 <div class="flex gap-4 mb-6">
                     <div class="card" style="flex:1; margin-bottom:0; padding: 20px; border: 1px solid var(--border);">
-                        <div class="card-title" style="color: var(--accent)">Pemasukan</div>
+                        <div class="card-title" style="color: var(--text)">Pemasukan</div>
+
                         <div class="card-value text-success" style="font-size:18px;">${Format.rupiah(data.totalIncomeAllTime)}</div>
                     </div>
                     <div class="card" style="flex:1; margin-bottom:0; padding: 20px; border: 1px solid var(--border);">
-                        <div class="card-title" style="color: var(--accent)">Pengeluaran</div>
+                        <div class="card-title" style="color: var(--text)">Pengeluaran</div>
+
                         <div class="card-value text-danger" style="font-size:18px;">${Format.rupiah(data.totalExpenseAllTime)}</div>
                     </div>
                 </div>
@@ -39,7 +46,8 @@ const DashboardKeuangan = {
                                 <i class="fas ${w.icon}" style="color: var(--accent)"></i>
                                 <span style="font-size: 12px; font-weight: 800; color: var(--text-muted)">${w.name}</span>
                             </div>
-                            <div class="card-value" style="font-size: 16px;">${Format.rupiah(w.balance)}</div>
+                            <div class="card-value" style="font-size: 16px; color: #000000;">${Format.rupiah(w.balance)}</div>
+
                         </div>
                     `).join('')}
                 </div>
@@ -67,7 +75,8 @@ const DashboardKeuangan = {
                             <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); margin-bottom: 4px; letter-spacing: 0.5px;">WAKTU</div>
                             <div class="flex justify-between items-center">
                                 <span style="font-size: 16px; font-weight: 800; color: var(--primary);">${Format.dateMonth(this.filters.month)}</span>
-                                <i class="fas fa-calendar-alt" style="color: #1e293b; font-size: 18px;"></i>
+                                <i class="fas fa-calendar-alt" style="color: #000000; font-size: 18px;"></i>
+
                             </div>
                             <input type="month" id="db-filter-month" value="${this.filters.month}" onchange="DashboardKeuangan.updateFilters()" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
                         </div>
@@ -247,7 +256,8 @@ const DashboardKeuangan = {
 
         // Gambar ulang secara instan
         const isDark = document.body.classList.contains('dark-mode');
-        const textColor = isDark ? '#ffffff' : '#0f172a'; // Putih bersih vs Navy gelap
+        const textColor = isDark ? '#ffffff' : '#000000'; // Putih bersih vs Hitam pekat
+
         const gridColor = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.05)';
 
         // 1. Bar Chart (Last 7 Days)
@@ -259,7 +269,8 @@ const DashboardKeuangan = {
                     labels: data.bar.labels,
                     datasets: [
                         { label: 'Pemasukan', data: data.bar.income, backgroundColor: '#10b981', borderRadius: 5 },
-                        { label: 'Pengeluaran', data: data.bar.expense, backgroundColor: '#e8696a', borderRadius: 5 }
+                        { label: 'Pengeluaran', data: data.bar.expense, backgroundColor: '#ef4444', borderRadius: 5 }
+
                     ]
                 },
                 options: {
@@ -334,7 +345,8 @@ const DashboardKeuangan = {
             };
 
             buildCompChart('incomeCompositionChart', data.incomeMonthlyComp.labels, data.incomeMonthlyComp.rawValues, '#10b981');
-            buildCompChart('expenseCompositionChart', data.expenseMonthlyComp.labels, data.expenseMonthlyComp.rawValues, '#e8696a');
+            buildCompChart('expenseCompositionChart', data.expenseMonthlyComp.labels, data.expenseMonthlyComp.rawValues, '#ef4444');
+
     }
 };
 
@@ -648,7 +660,12 @@ const Transaksi = {
                 let trx = Storage.get(Storage.KEYS.TRANSAKSI);
                 trx = trx.filter(t => t.id !== id);
                 Storage.set(Storage.KEYS.TRANSAKSI, trx);
-                UI.showToast('Transaksi dihapus');
+                Swal.fire({
+                    title: 'Dihapus',
+                    text: 'Transaksi telah berhasil dihapus.',
+                    icon: 'success',
+                    confirmButtonColor: 'var(--primary)',
+                });
                 this.render(document.getElementById('appContent'));
             }
         });
