@@ -14,14 +14,18 @@ const Theme = {
         const body = document.body;
         const icon = document.querySelector('#themeToggle i');
         
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        
         if (theme === 'dark') {
             body.classList.add('dark-mode');
             body.classList.remove('light-mode');
             if (icon) icon.className = 'fas fa-sun';
+            if (metaTheme) metaTheme.setAttribute('content', '#0f172a');
         } else {
             body.classList.add('light-mode');
             body.classList.remove('dark-mode');
             if (icon) icon.className = 'fas fa-moon';
+            if (metaTheme) metaTheme.setAttribute('content', '#f5f0e8');
         }
 
         // Trigger re-render instan jika aplikasi sudah inisialisasi (preserve scroll)
