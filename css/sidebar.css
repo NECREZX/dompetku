@@ -1,19 +1,27 @@
 /* === SIDEBAR — 30% Deep Teal === */
 .sidebar {
     position: fixed;
-    top: 0;
+    top: 64px; /* Below Navbar */
     left: -280px;
     width: 280px;
-    height: 100vh;
-    background: var(--bar-bg); /* 30% Deep Teal */
-    border-right: none;
-    z-index: 2000;
+    height: calc(100vh - 64px - 72px); /* Between Navbar and Bottom Bar */
+    background: rgba(245, 240, 232, 0.7); /* Match Navbar Light */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 999;
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 15px 0 50px rgba(0, 0, 0, 0.3);
-    padding: 0;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
+
+
+    padding: 30px 0 10px 0; /* Reduced bottom padding */
+
     display: flex;
     flex-direction: column;
 }
+
+
 
 .sidebar.open {
     transform: translateX(280px);
@@ -21,89 +29,33 @@
 
 .sidebar-overlay {
     position: fixed;
-    top: 0;
+    top: 64px;
     left: 0;
     width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1500;
+    height: calc(100vh - 64px - 72px);
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 998;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease;
     backdrop-filter: blur(4px);
 }
 
+
 .sidebar-overlay.visible {
     opacity: 1;
     pointer-events: auto;
 }
 
-/* Sidebar Header */
-.sidebar-header {
-    padding: 32px 24px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.sidebar-close-btn {
-    position: absolute;
-    right: 5px;
-    top: 26px;
-    width: 42px;
-    height: 42px;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 100;
-}
 
-.sidebar-close-btn:hover {
-    color: #ffffff;
-}
-
-.sidebar-close-btn i {
-    font-size: 20px;
-}
-
-.sidebar-logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    color: #ffffff;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-
-.logo-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.logo-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 
 .sidebar-label {
     padding: 0 24px;
     font-size: 11px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.6) !important;
+    color: var(--text-muted) !important;
+
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 15px;
@@ -124,7 +76,7 @@
     gap: 14px;
     padding: 13px 16px;
     border-radius: 12px;
-    color: rgba(255, 255, 255, 0.85) !important; /* Always white */
+    color: var(--text) !important;
     background: transparent;
     border: none;
     width: 100%;
@@ -137,36 +89,45 @@
 
 .sidebar-item i {
     font-size: 18px;
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: var(--text-muted) !important;
+
     transition: inherit;
     width: 20px;
     text-align: center;
 }
 
 .sidebar-item:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff !important;
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-item:hover i {
-    color: #ffffff !important;
+    color: var(--primary) !important;
 }
 
 .sidebar-item.active {
     background: var(--accent);
     color: #ffffff !important;
-    box-shadow: 0 4px 15px rgba(232, 105, 106, 0.4);
+    box-shadow: 0 4px 15px rgba(176, 120, 64, 0.3);
 }
 
 .sidebar-item.active i {
     color: #ffffff !important;
 }
 
+
+
+.sidebar-item.active i {
+    color: #ffffff !important;
+}
+
+
 /* Footer & Profile */
 .sidebar-footer {
-    padding: 20px 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: var(--bar-bg); /* Matches sidebar exactly */
+    padding: 20px 24px 30px 24px; /* Increased bottom padding to lower the profile */
+
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    background: transparent;
+
 }
 
 .user-profile {
@@ -180,7 +141,7 @@
 }
 
 .user-profile:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .user-profile img,
@@ -189,7 +150,7 @@
     height: 44px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(0, 0, 0, 0.05);
     flex-shrink: 0;
 }
 
@@ -209,13 +170,14 @@
 }
 
 .user-name {
-    color: #ffffff;
+    color: var(--text);
     font-size: 14px;
     font-weight: 700;
 }
 
 .user-rank {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
+
     font-size: 11px;
 }
 
