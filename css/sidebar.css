@@ -1,10 +1,10 @@
 /* === SIDEBAR — 30% Deep Teal === */
 .sidebar {
     position: fixed;
-    top: 64px; /* Below Navbar */
+    top: calc(64px + env(safe-area-inset-top)); /* Below Dynamic Navbar */
     left: -280px;
     width: 280px;
-    height: calc(100vh - 64px - 72px); /* Between Navbar and Bottom Bar */
+    height: calc(100vh - (64px + env(safe-area-inset-top)) - (72px + env(safe-area-inset-bottom))); /* Adjusted for both bars */
     background: rgba(245, 240, 232, 0.7); /* Match Navbar Light */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -29,10 +29,10 @@
 
 .sidebar-overlay {
     position: fixed;
-    top: 64px;
+    top: calc(64px + env(safe-area-inset-top));
     left: 0;
     width: 100%;
-    height: calc(100vh - 64px - 72px);
+    height: calc(100vh - (64px + env(safe-area-inset-top)) - (72px + env(safe-area-inset-bottom)));
     background: rgba(0, 0, 0, 0.2);
     z-index: 998;
     opacity: 0;
