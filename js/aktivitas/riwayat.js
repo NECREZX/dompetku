@@ -1,6 +1,7 @@
 const RiwayatAktivitas = {
     showAllNotes: false,
     showAllReminders: false,
+    showAllWishlist: false,
     filters: {
         search: '',
         date: '',
@@ -82,11 +83,12 @@ const RiwayatAktivitas = {
         if (!container) return;
 
         const activities = this.getFilteredData();
+        const wishlist = this.getFilteredWishlist();
         
         const notes = activities.filter(a => a.category === 'notes');
         const reminders = activities.filter(a => a.category === 'reminders');
 
-        if (activities.length === 0) {
+        if (activities.length === 0 && wishlist.length === 0) {
             container.innerHTML = `<div class="card text-center py-12" style="background: none; border: 1px dashed var(--border);"><p class="text-muted">Tidak ada aktivitas yang sesuai filter.</p></div>`;
             return;
         }
@@ -115,7 +117,105 @@ const RiwayatAktivitas = {
                     ${this.renderRemindersTable(reminders)}
                 </div>
             </div>
+
+            <div class="card mb-6" style="padding: 20px;">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-heart text-danger"></i> Tabel Wishlist (Impian)
+                    </h3>
+                    ${wishlist.length > 3 ? `<button class="btn-text" onclick="RiwayatAktivitas.toggleWishlistAll()" style="font-size: 12px; color: var(--accent); background: none; border: none; cursor: pointer; font-weight: 700;">${this.showAllWishlist ? 'Sembunyikan' : 'Lihat Semua'}</button>` : ''}
+                </div>
+                <div class="table-responsive">
+                    ${this.renderWishlistTable(wishlist)}
+                </div>
+            </div>
         `;
+    },
+
+    getFilteredWishlist() {
+        let wishlist = Storage.get(Storage.KEYS.WISHLIST);
+        if (this.filters.search) {
+            wishlist = wishlist.filter(w => w.title.toLowerCase().includes(this.filters.search));
+        }
+        if (this.filters.month) {
+            wishlist = wishlist.filter(w => w.month === this.filters.month);
+        }
+        return wishlist.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    },
+
+    renderWishlistTable(data) {
+        if (data.length === 0) return '<p class="text-center py-4 text-muted" style="font-size: 13px;">Belum ada impian.</p>';
+        
+        const displayData = this.showAllWishlist ? data : data.slice(0, 3);
+        const isDark = document.body.classList.contains('dark-mode');
+
+        return `
+            <table style="table-layout: fixed; width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="width: 55%; text-align: left;">Impian / Keterangan</th>
+                        <th style="width: 30%; text-align: left;">Target Bulan</th>
+                        <th style="width: 15%; text-align: center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${displayData.map(w => `
+                        <tr style="${w.achieved ? 'opacity: 0.6;' : ''}">
+                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="checkbox" ${w.achieved ? 'checked' : ''} onchange="RiwayatAktivitas.toggleWishlist('${w.id}')" style="cursor: pointer; width: 18px; height: 18px;">
+                                    <div style="font-weight: 700; color: var(--primary); font-size: 13px; ${w.achieved ? 'text-decoration: line-through;' : ''}">${w.title}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="font-size: 11px; color: ${isDark ? '#f1f5f9' : 'var(--text-muted)'}; font-weight: 800;">${Format.dateMonth(w.month)}</div>
+                            </td>
+                            <td style="text-align: center;">
+                                <button onclick="TambahAktivitas.edit('${w.id}', 'wishlist')" style="background:none; border:none; color:var(--accent); cursor:pointer; margin: 0 4px;"><i class="fas fa-edit"></i></button>
+                                <button onclick="RiwayatAktivitas.deleteWishlist('${w.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; margin: 0 4px;"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+    },
+
+    toggleWishlistAll() {
+        this.showAllWishlist = !this.showAllWishlist;
+        this.renderTables();
+    },
+
+    toggleWishlist(id) {
+        const wishlist = Storage.get(Storage.KEYS.WISHLIST);
+        const item = wishlist.find(w => w.id === id);
+        if (item) {
+            item.achieved = !item.achieved;
+            Storage.set(Storage.KEYS.WISHLIST, wishlist);
+            if (item.achieved) Storage.addNotif('Impian Tercapai!', `Selamat! "${item.title}" telah tercapai.`);
+            this.renderTables();
+        }
+    },
+
+    deleteWishlist(id) {
+        Swal.fire({
+            title: 'Hapus Impian?',
+            text: "Impian ini akan dihapus dari daftar.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--primary)',
+            cancelButtonColor: 'var(--danger)',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let wishlist = Storage.get(Storage.KEYS.WISHLIST);
+                wishlist = wishlist.filter(w => w.id !== id);
+                Storage.set(Storage.KEYS.WISHLIST, wishlist);
+                UI.showToast('Impian dihapus');
+                this.renderTables();
+            }
+        });
     },
 
     toggleNotes() {
@@ -134,27 +234,25 @@ const RiwayatAktivitas = {
         const displayData = this.showAllNotes ? data : data.slice(0, 3);
         
         return `
-            <table>
+            <table style="table-layout: fixed; width: 100%;">
                 <thead>
                     <tr>
-                        <th style="width: 50%">Judul & Konten</th>
-                        <th style="width: 30%">Tanggal</th>
-                        <th style="width: 20%; text-align: right;">Aksi</th>
+                        <th style="width: 55%; text-align: left;">Judul & Konten</th>
+                        <th style="width: 30%; text-align: left;">Tanggal</th>
+                        <th style="width: 15%; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${displayData.map(a => `
                         <tr onclick="RiwayatAktivitas.viewDetail('${a.id}')" style="cursor: pointer;">
-                            <td>
+                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 <div style="font-weight: 700; color: var(--primary); font-size: 13px;">${a.title}</div>
-                                <div style="font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${a.content || '-'}</div>
+                                <div style="font-size: 11px; color: var(--text-muted);">${a.content || '-'}</div>
                             </td>
                             <td style="font-size: 11px; color: var(--text-muted);">${Format.date(a.createdAt.split('T')[0])}</td>
-                            <td style="text-align: right;" onclick="event.stopPropagation()">
-                                <div class="flex justify-end gap-3">
-                                    <button onclick="TambahAktivitas.edit('${a.id}')" style="background:none; border:none; color:var(--accent); cursor:pointer;"><i class="fas fa-edit"></i></button>
-                                    <button onclick="RiwayatAktivitas.delete('${a.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash-alt"></i></button>
-                                </div>
+                            <td style="text-align: center;" onclick="event.stopPropagation()">
+                                <button onclick="TambahAktivitas.edit('${a.id}')" style="background:none; border:none; color:var(--accent); cursor:pointer; margin: 0 4px;"><i class="fas fa-edit"></i></button>
+                                <button onclick="RiwayatAktivitas.delete('${a.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; margin: 0 4px;"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     `).join('')}
@@ -172,7 +270,7 @@ const RiwayatAktivitas = {
             title: act.title,
             html: `
                 <div style="text-align: left; padding: 10px;">
-                    <div style="margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: var(--text); border-left: 4px solid var(--accent); padding-left: 15px; background: #f8fafc; padding: 15px; border-radius: 8px;">
+                    <div style="margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: var(--text); border-left: 4px solid var(--accent); padding-left: 15px; background: rgba(var(--primary-rgb), 0.05); padding: 15px; border-radius: 8px;">
                         ${act.content || '<em>Tidak ada deskripsi.</em>'}
                     </div>
                     <div style="font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
@@ -196,12 +294,12 @@ const RiwayatAktivitas = {
         const displayData = this.showAllReminders ? data : data.slice(0, 3);
         
         return `
-            <table>
+            <table style="table-layout: fixed; width: 100%;">
                 <thead>
                     <tr>
-                        <th style="width: 40%">Aktivitas</th>
-                        <th style="width: 40%">Waktu Pengingat</th>
-                        <th style="width: 20%; text-align: right;">Aksi</th>
+                        <th style="width: 55%; text-align: left;">Aktivitas</th>
+                        <th style="width: 30%; text-align: left;">Waktu Pengingat</th>
+                        <th style="width: 15%; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -209,15 +307,15 @@ const RiwayatAktivitas = {
                         const hasDate = a.datetime && a.datetime.includes('T');
                         return `
                             <tr>
-                                <td><div style="font-weight: 700; color: var(--primary); font-size: 13px;">${a.title}</div></td>
+                                <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    <div style="font-weight: 700; color: var(--primary); font-size: 13px;">${a.title}</div>
+                                </td>
                                 <td style="font-size: 11px; color: var(--warning); font-weight: 600;">
                                     ${hasDate ? Format.date(a.datetime.split('T')[0]) + ' ' + a.datetime.split('T')[1] : '-'}
                                 </td>
-                                <td style="text-align: right;">
-                                    <div class="flex justify-end gap-3">
-                                        <button onclick="TambahAktivitas.edit('${a.id}')" style="background:none; border:none; color:var(--accent); cursor:pointer;"><i class="fas fa-edit"></i></button>
-                                        <button onclick="RiwayatAktivitas.delete('${a.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash-alt"></i></button>
-                                    </div>
+                                <td style="text-align: center;">
+                                    <button onclick="TambahAktivitas.edit('${a.id}')" style="background:none; border:none; color:var(--accent); cursor:pointer; margin: 0 4px;"><i class="fas fa-edit"></i></button>
+                                    <button onclick="RiwayatAktivitas.delete('${a.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; margin: 0 4px;"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         `;
