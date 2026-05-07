@@ -1,211 +1,342 @@
 const DashboardKeuangan = {
+    filters: {
+        month: new Date().toISOString().substring(0, 7)
+    },
+
     render(container) {
         const data = this.calculateData();
         container.innerHTML = `
             <div class="container slide-in">
                 <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 style="font-size:24px">Dashboard Pencatatan</h2>
-                    </div>
+                    <h2 style="font-size:24px">Dashboard Keuangan</h2>
                 </div>
 
+                <!-- 1. Global Balance Card -->
                 <div class="card balance-card" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; margin-bottom: 24px; box-shadow: 0 10px 20px rgba(232, 105, 106, 0.3);">
-                    <div class="card-title" style="color: rgba(255,255,255,0.8);">Total Saldo Tersedia</div>
-                    <div class="card-value" style="color: white; font-size: 34px;">${Format.rupiah(data.saldo || 0)}</div>
+                    <div class="card-title" style="color: white; font-size: 11px;">Total Saldo Tersedia</div>
+                    <div class="card-value" style="color: white; font-size: 34px;">${Format.rupiah(data.totalSaldo || 0)}</div>
                 </div>
 
+                <!-- 2. Quick Summary Cards -->
                 <div class="flex gap-4 mb-6">
                     <div class="card" style="flex:1; margin-bottom:0; padding: 20px; border: 1px solid var(--border);">
                         <div class="card-title" style="color: var(--accent)">Pemasukan</div>
-                        <div class="card-value text-success" style="font-size:18px;">${Format.rupiah(data.income || 0)}</div>
+                        <div class="card-value text-success" style="font-size:18px;">${Format.rupiah(data.totalIncomeAllTime)}</div>
                     </div>
                     <div class="card" style="flex:1; margin-bottom:0; padding: 20px; border: 1px solid var(--border);">
                         <div class="card-title" style="color: var(--accent)">Pengeluaran</div>
-                        <div class="card-value text-danger" style="font-size:18px;">${Format.rupiah(data.expense || 0)}</div>
+                        <div class="card-value text-danger" style="font-size:18px;">${Format.rupiah(data.totalExpenseAllTime)}</div>
                     </div>
                 </div>
 
                 <br>
 
+                <!-- 3. Wallet List -->
                 <div class="flex gap-4 mb-8 wallet-container" style="overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none;">
                     ${data.walletBalances.map(w => `
                         <div class="card wallet-card" style="min-width: calc((100% - 16px) / 2); flex-shrink: 0; margin-bottom: 0; padding: 16px; border: 1px solid var(--border);">
                             <div class="flex items-center gap-2 mb-3">
                                 <i class="fas ${w.icon}" style="color: var(--accent)"></i>
-                                <span style="font-size: 12px; font-weight: 700; color: var(--text-muted)">${w.name}</span>
+                                <span style="font-size: 12px; font-weight: 800; color: var(--text-muted)">${w.name}</span>
                             </div>
-                            <div style="font-weight: 800; font-size: 15px;">${Format.rupiah(w.balance)}</div>
+                            <div class="card-value" style="font-size: 16px;">${Format.rupiah(w.balance)}</div>
                         </div>
                     `).join('')}
                 </div>
 
                 <br>
 
-                <h2 class="mb-4">Statistik Pengeluaran</h2>
-                <div class="card mb-6">
-                    <div class="chart-container" style="height: 250px">
+                <!-- BAWAH: KUMPULAN GRAFIK -->
+                
+                <!-- 1. Tren 7 Hari -->
+                <h2 class="mb-4">Transaksi Terbaru</h2>
+                <div class="card mb-8" style="padding: 20px; border: 1px solid var(--border);">
+                    <div style="height: 250px">
                         <canvas id="barChart"></canvas>
                     </div>
                 </div>
 
                 <br>
 
-                <h2 class="mb-4">Komposisi Pengeluaran</h2>
-                <div class="card mb-6">
-                    <div class="chart-container" style="height: 250px">
-                        <canvas id="pieChart"></canvas>
+                <!-- 2. Analisis Bulanan -->
+                <div class="mb-6">
+                    <h2 class="mb-4">Analisis Bulanan</h2>
+                    <div class="flex gap-3 items-center">
+                        <!-- Card Filter Gaya Mockup (PUTIH) -->
+                        <div class="card" style="flex: 1; margin-bottom:0; padding: 12px 20px; border: 1px solid var(--border); border-radius: 24px; position: relative; background: var(--surface); display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                            <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); margin-bottom: 4px; letter-spacing: 0.5px;">WAKTU</div>
+                            <div class="flex justify-between items-center">
+                                <span style="font-size: 16px; font-weight: 800; color: var(--primary);">${Format.dateMonth(this.filters.month)}</span>
+                                <i class="fas fa-calendar-alt" style="color: #1e293b; font-size: 18px;"></i>
+                            </div>
+                            <input type="month" id="db-filter-month" value="${this.filters.month}" onchange="DashboardKeuangan.updateFilters()" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                        </div>
+
+                        <!-- Tombol Reset Gaya Mockup (PUTIH) -->
+                        <div onclick="DashboardKeuangan.resetFilters()" class="card" style="width: 58px; height: 58px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 0; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                            <i class="fas fa-undo" style="color: var(--primary); font-size: 18px;"></i>
+                        </div>
                     </div>
                 </div>
 
-               
+                <br>
+
+                <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px;">
+                    <div class="card" style="padding: 20px; border: 1px solid var(--border);">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="card-title" style="color: var(--success); margin-bottom: 4px;">Pemasukan Bulanan</div>
+                                <div class="card-value text-success" style="font-size: 22px;">${Format.rupiah(data.incomeMonthly)}</div>
+                            </div>
+                            <div style="text-align: right">
+                                <div style="font-size: 10px; font-weight: 800; color: var(--text-muted)">DOMINAN</div>
+                                <div style="font-size: 12px; font-weight: 800; color: var(--primary)">${data.topIncomeSource.name} (${data.topIncomeSource.percent}%)</div>
+                            </div>
+                        </div>
+                        <div style="height: 160px;">
+                            <canvas id="incomeCompositionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card" style="padding: 20px; border: 1px solid var(--border);">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="card-title" style="color: var(--danger); margin-bottom: 4px;">Pengeluaran Bulanan</div>
+                                <div class="card-value text-danger" style="font-size: 22px;">${Format.rupiah(data.expenseMonthly)}</div>
+                            </div>
+                            <div style="text-align: right">
+                                <div style="font-size: 10px; font-weight: 800; color: var(--text-muted)">DOMINAN</div>
+                                <div style="font-size: 12px; font-weight: 800; color: var(--primary)">${data.topExpenseCat.name} (${data.topExpenseCat.percent}%)</div>
+                            </div>
+                        </div>
+                        <div style="height: 160px;">
+                            <canvas id="expenseCompositionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Komposisi Pengeluaran (Semua) -->
+                <h2 class="mb-4">Pengeluaran Keseluruhan</h2>
+                <div class="card mb-8" style="padding: 20px; border: 1px solid var(--border);">
+                    <div style="height: 250px">
+                        <canvas id="pieChartExpense"></canvas>
+                    </div>
+                </div>
+
+                <br>
+
+                <!-- 4. Komposisi Pemasukan (Semua) -->
+                <h2 class="mb-4">Pemasukan Keseluruhan</h2>
+                <div class="card mb-8" style="padding: 20px; border: 1px solid var(--border);">
+                    <div style="height: 250px">
+                        <canvas id="pieChartIncome"></canvas>
+                    </div>
+                </div>
             </div>
         `;
         
         this.renderCharts(data);
     },
 
+    updateFilters() {
+        this.filters.month = document.getElementById('db-filter-month').value;
+        this.render(document.getElementById('appContent'));
+    },
+
+    resetFilters() {
+        this.filters.month = new Date().toISOString().substring(0, 7);
+        this.render(document.getElementById('appContent'));
+    },
+
     calculateData() {
         const trx = Storage.get(Storage.KEYS.TRANSAKSI);
         const wallets = Storage.get(Storage.KEYS.DOMPET);
         const cats = Storage.get(Storage.KEYS.KATEGORI);
+        const sources = Storage.get(Storage.KEYS.SUMBER);
         
-        let income = 0, expense = 0;
-        // Initialize balances with Saldo Awal from each wallet
-        const walletBalances = wallets.map(w => ({ 
-            ...w, 
-            balance: Number(w.balance || 0) 
-        }));
-
-        let totalInitialBalance = walletBalances.reduce((sum, w) => sum + w.balance, 0);
-
-        // Charts preparation
-        const catStats = {};
-        const dailyIncome = {};
-        const dailyExpense = {};
-
+        let totalIncomeAllTime = 0, totalExpenseAllTime = 0;
+        const dailyIncome = {}, dailyExpense = {}, allTimeCatStats = {}, allTimeSourceStats = {};
+        
         trx.forEach(t => {
             const amount = Number(t.amount);
-            const wIdx = walletBalances.findIndex(w => w.id === t.walletId);
-            const dateKey = t.date;
-
             if (t.type === 'pemasukan') {
-                income += amount;
-                dailyIncome[dateKey] = (dailyIncome[dateKey] || 0) + amount;
-                if (wIdx !== -1) walletBalances[wIdx].balance += amount;
+                totalIncomeAllTime += amount;
+                dailyIncome[t.date] = (dailyIncome[t.date] || 0) + amount;
+                allTimeSourceStats[t.sourceId] = (allTimeSourceStats[t.sourceId] || 0) + amount;
             } else {
-                expense += amount;
-                dailyExpense[dateKey] = (dailyExpense[dateKey] || 0) + amount;
-                if (wIdx !== -1) walletBalances[wIdx].balance -= amount;
-                // Pie stats
-                catStats[t.categoryId] = (catStats[t.categoryId] || 0) + amount;
+                totalExpenseAllTime += amount;
+                dailyExpense[t.date] = (dailyExpense[t.date] || 0) + amount;
+                allTimeCatStats[t.categoryId] = (allTimeCatStats[t.categoryId] || 0) + amount;
             }
         });
 
-        // Pie data
-        const pieLabels = [], pieValues = [];
-        Object.keys(catStats).forEach(id => {
-            const cat = cats.find(c => c.id === id);
-            pieLabels.push(cat ? cat.name : 'Lainnya');
-            pieValues.push(catStats[id]);
+        const monthlyTrx = trx.filter(t => t.date.startsWith(this.filters.month));
+        let incomeMonthly = 0, expenseMonthly = 0;
+        const incomeMonthlyStats = {}, expenseMonthlyStats = {};
+
+        monthlyTrx.forEach(t => {
+            const amount = Number(t.amount);
+            if (t.type === 'pemasukan') {
+                incomeMonthly += amount;
+                incomeMonthlyStats[t.sourceId] = (incomeMonthlyStats[t.sourceId] || 0) + amount;
+            } else {
+                expenseMonthly += amount;
+                expenseMonthlyStats[t.categoryId] = (expenseMonthlyStats[t.categoryId] || 0) + amount;
+            }
         });
 
-        // Bar data (last 7 days/entries)
+        const walletBalances = wallets.map(w => {
+            let balance = Number(w.balance || 0);
+            trx.forEach(t => {
+                if (t.walletId === w.id) {
+                    if (t.type === 'pemasukan') balance += Number(t.amount);
+                    else balance -= Number(t.amount);
+                }
+            });
+            return { ...w, balance };
+        });
+
+        const totalSaldo = walletBalances.reduce((sum, w) => sum + w.balance, 0);
+
+        const prepStats = (statsObj, referenceList) => {
+            const total = Object.values(statsObj).reduce((a, b) => a + b, 0);
+            const list = Object.keys(statsObj).map(id => {
+                const ref = referenceList.find(r => r.id === id);
+                const val = statsObj[id];
+                const percent = total > 0 ? Math.round((val / total) * 100) : 0;
+                return { name: ref ? ref.name : 'Lainnya', value: val, percent };
+            }).sort((a,b) => b.value - a.value);
+
+            return {
+                labels: list.map(l => l.name),
+                values: list.map(l => l.percent),
+                top: list.length > 0 ? list[0] : { name: '-', percent: 0 },
+                rawValues: list.map(l => l.value)
+            };
+        };
+
+        const incomeMonthlyComp = prepStats(incomeMonthlyStats, sources);
+        const expenseMonthlyComp = prepStats(expenseMonthlyStats, cats);
+        const incomeAllTimeComp = prepStats(allTimeSourceStats, sources);
+        const expenseAllTimeComp = prepStats(allTimeCatStats, cats);
+
         const allDates = [...new Set([...Object.keys(dailyIncome), ...Object.keys(dailyExpense)])].sort().slice(-7);
-        const barIncome = allDates.map(d => dailyIncome[d] || 0);
-        const barExpense = allDates.map(d => dailyExpense[d] || 0);
 
         return {
-            saldo: totalInitialBalance + income - expense,
-            income,
-            expense,
+            totalSaldo, totalIncomeAllTime, totalExpenseAllTime,
+            incomeMonthly, expenseMonthly,
             walletBalances,
-            bar: { labels: allDates, income: barIncome, expense: barExpense },
-            pie: { labels: pieLabels, values: pieValues }
+            incomeMonthlyComp, expenseMonthlyComp,
+            incomeAllTimeComp, expenseAllTimeComp,
+            topIncomeSource: incomeMonthlyComp.top,
+            topExpenseCat: expenseMonthlyComp.top,
+            bar: { labels: allDates, income: allDates.map(d => dailyIncome[d] || 0), expense: allDates.map(d => dailyExpense[d] || 0) }
         };
     },
 
-    renderCharts(data) {
-        const barCtx = document.getElementById('barChart');
-        const pieCtx = document.getElementById('pieChart');
-        const isDark = document.body.classList.contains('dark-mode');
-        const textColor = isDark ? '#94a3b8' : '#64748b';
-        const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+    charts: {},
 
-        if (barCtx) {
-            new Chart(barCtx, {
+    renderCharts(data) {
+        // Hancurkan semua chart yang ada jika masih tersimpan referensinya
+        Object.keys(this.charts).forEach(key => {
+            if (this.charts[key]) {
+                this.charts[key].destroy();
+                delete this.charts[key];
+            }
+        });
+
+        // Gambar ulang secara instan
+        const isDark = document.body.classList.contains('dark-mode');
+        const textColor = isDark ? '#ffffff' : '#0f172a'; // Putih bersih vs Navy gelap
+        const gridColor = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.05)';
+
+        // 1. Bar Chart (Last 7 Days)
+        const ctxBar = document.getElementById('barChart');
+        if (ctxBar) {
+            this.charts['barChart'] = new Chart(ctxBar, {
                 type: 'bar',
                 data: {
                     labels: data.bar.labels,
                     datasets: [
-                        {
-                            label: 'Pemasukan',
-                            data: data.bar.income,
-                            backgroundColor: '#10b981',
-                            borderRadius: 5
-                        },
-                        {
-                            label: 'Pengeluaran',
-                            data: data.bar.expense,
-                            backgroundColor: '#e8696a',
-                            borderRadius: 5
-                        }
+                        { label: 'Pemasukan', data: data.bar.income, backgroundColor: '#10b981', borderRadius: 5 },
+                        { label: 'Pengeluaran', data: data.bar.expense, backgroundColor: '#e8696a', borderRadius: 5 }
                     ]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { 
-                        legend: { 
-                            position: 'bottom',
-                            labels: { color: textColor, usePointStyle: true }
-                        } 
-                    },
-                    scales: { 
-                        y: { 
-                            beginAtZero: true, 
-                            grid: { color: gridColor },
-                            ticks: { 
-                                color: textColor,
-                                callback: value => 'Rp ' + (value/1000) + 'k' 
-                            }
-                        }, 
-                        x: { 
-                            grid: { display: false },
-                            ticks: { color: textColor }
-                        } 
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Space Grotesk', weight: '700' } } } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Space Grotesk', weight: '500' }, callback: v => 'Rp ' + (v/1000) + 'k' } },
+                        x: { grid: { display: false }, ticks: { color: textColor, font: { family: 'Space Grotesk', weight: '500' } } }
                     }
                 }
             });
         }
 
-
-        if (pieCtx) {
-            new Chart(pieCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: data.pie.labels,
-                    datasets: [{
-                        data: data.pie.values,
-                        backgroundColor: ['#ff80ecff', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#d7072aff'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { 
-                        legend: { 
-                            position: 'bottom', 
-                            labels: { color: textColor, usePointStyle: true, padding: 20 } 
-                        } 
+            // 2. All Time Doughnut Charts
+            const buildDoughnut = (id, labels, values) => {
+                const ctx = document.getElementById(id);
+                if (!ctx) return;
+                this.charts[id] = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{ data: values, backgroundColor: ['#ff80ecff', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#d7072aff'], borderWidth: 0 }]
                     },
-                    cutout: '70%'
-                }
-            });
-        }
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { position: 'bottom', labels: { color: textColor, padding: 20, font: { family: 'Space Grotesk', weight: '600' } } },
+                            tooltip: { callbacks: { label: (context) => ` ${Format.rupiah(context.raw)}` } }
+                        },
+                        cutout: '70%'
+                    }
+                });
+            };
+
+            buildDoughnut('pieChartExpense', data.expenseAllTimeComp.labels, data.expenseAllTimeComp.rawValues);
+            buildDoughnut('pieChartIncome', data.incomeAllTimeComp.labels, data.incomeAllTimeComp.rawValues);
+
+            // 3. Monthly Analysis Horizontal Bar Charts
+            const buildCompChart = (id, labels, rawValues, color) => {
+                const ctx = document.getElementById(id);
+                if (!ctx) return;
+                this.charts[id] = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{ data: rawValues, backgroundColor: color, borderRadius: 8, barThickness: 12 }]
+                    },
+                    options: {
+                        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { callbacks: { label: (context) => ` ${Format.rupiah(context.raw)}` } }
+                        },
+                        scales: {
+                            x: { 
+                                beginAtZero: true, 
+                                grid: { color: gridColor }, 
+                                ticks: { 
+                                    color: textColor, 
+                                    font: { family: 'Space Grotesk', weight: '500' },
+                                    callback: v => {
+                                        if (v >= 1000000) return (v/1000000).toFixed(1) + 'jt';
+                                        if (v >= 1000) return (v/1000) + 'k';
+                                        return v;
+                                    }
+                                } 
+                            },
+                            y: { grid: { display: false }, ticks: { color: textColor, font: { weight: '800', size: 11, family: 'Space Grotesk' } } }
+                        }
+                    }
+                });
+            };
+
+            buildCompChart('incomeCompositionChart', data.incomeMonthlyComp.labels, data.incomeMonthlyComp.rawValues, '#10b981');
+            buildCompChart('expenseCompositionChart', data.expenseMonthlyComp.labels, data.expenseMonthlyComp.rawValues, '#e8696a');
     }
 };
-
 
 const Transaksi = {
     currentType: 'pengeluaran',
