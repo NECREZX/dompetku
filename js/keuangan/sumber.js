@@ -186,7 +186,12 @@ const SumberKategori = {
                 let items = Storage.get(key);
                 items = items.filter(i => i.id !== id);
                 Storage.set(key, items);
-                UI.showToast('Data berhasil dihapus');
+                Swal.fire({
+                    title: 'Berhasil',
+                    text: 'Data telah berhasil dihapus.',
+                    icon: 'success',
+                    confirmButtonColor: 'var(--primary)',
+                });
                 this.renderList();
             }
         });
