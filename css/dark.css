@@ -155,3 +155,6 @@ body.dark-mode .swal2-title,
 body.dark-mode .swal2-content {
     color: #f5f0e8 !important;
 }
+body.dark-mode .splash-screen {
+    background: #1c1610 !important;
+}
