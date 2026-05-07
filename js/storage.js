@@ -9,7 +9,8 @@ const Storage = {
         NOTIF: 'dk_notif',
         THEME: 'dk_theme',
         USER: 'dk_user',
-        AKTIVITAS: 'dk_aktivitas'
+        AKTIVITAS: 'dk_aktivitas',
+        WISHLIST: 'dk_wishlist'
     },
 
     get(key) {
