@@ -1,10 +1,10 @@
 {
-  "name": "DompetKu — Pencatat Keuangan & Tabungan",
+  "name": "DompetKu",
   "short_name": "DompetKu",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0f172a",
+  "background_color": "#f5f0e8",
+  "theme_color": "#f5f0e8",
   "orientation": "portrait",
   "icons": [
     {
