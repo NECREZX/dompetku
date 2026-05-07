@@ -109,14 +109,7 @@ const UI = {
         }
     },
 
-    startClock() {
-        const clockEl = document.getElementById('navbarClock');
-        setInterval(() => {
-            const now = new Date();
-            // Force en-GB to get colons instead of Indonesian dots
-            clockEl.innerText = now.toLocaleTimeString('en-GB', { hour12: false });
-        }, 1000);
-    },
+
 
 
     async requestNotificationPermission() {
@@ -250,15 +243,34 @@ document.addEventListener('click', (e) => {
         UI.hideModal();
     }
 });
-// Scroll to Top Listener
+// Navbar & Bottom Bar Scroll Shadow
 window.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    const bottomBar = document.querySelector('.bottom-bar');
     const scrollToTopBtn = document.getElementById('scrollToTop');
-    if (!scrollToTopBtn) return;
     
-    // Check if user is at the bottom of the page
-    // window.innerHeight + window.scrollY should be >= document.documentElement.scrollHeight
-    const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+    const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 50);
+
+    if (navbar) {
+        if (window.scrollY > 10) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }
+
+    // Bottom Bar shadow when NOT at the bottom
+    if (bottomBar) {
+        if (!isAtBottom && document.documentElement.scrollHeight > window.innerHeight) {
+            bottomBar.classList.add('scrolled');
+        } else {
+            bottomBar.classList.remove('scrolled');
+        }
+    }
+
+
     
+    // Scroll to Top visibility (only at the very bottom as before)
     if (isAtBottom) {
         scrollToTopBtn.classList.add('visible');
     } else {
@@ -267,6 +279,5 @@ window.addEventListener('scroll', () => {
 });
 
 // Initialize
-UI.startClock();
 UI.requestNotificationPermission();
 
