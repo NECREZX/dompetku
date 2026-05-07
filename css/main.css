@@ -50,12 +50,17 @@
 
 
 
+html, body {
+    background-color: var(--background);
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 500;
     font-size: 16px;
     letter-spacing: -0.2px;
-    background-color: var(--background);
     color: var(--text);
     overflow-x: hidden;
     line-height: 1.6;
