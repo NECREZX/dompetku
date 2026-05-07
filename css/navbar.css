@@ -4,14 +4,12 @@
     left: 0;
     right: 0;
     height: calc(64px + env(safe-area-inset-top));
-    background: rgba(245, 240, 232, 0.7); /* Warm Cream transparency */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--background); 
     z-index: 1000;
     display: flex;
-    align-items: flex-end; /* Align content to the bottom of the safe area padded container */
+    align-items: flex-end; 
     justify-content: space-between;
-    padding: 0 16px 10px 16px; /* 10px bottom padding for content */
+    padding: 0 16px 10px 16px; 
     padding-top: env(safe-area-inset-top);
     transition: var(--transition);
     border-bottom: none;
@@ -19,7 +17,14 @@
 }
 
 .navbar.scrolled {
+    background: rgba(245, 240, 232, 0.85) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .navbar.scrolled {
+    background: rgba(28, 22, 16, 0.85) !important;
 }
 
 
