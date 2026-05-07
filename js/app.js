@@ -10,6 +10,7 @@ const App = {
         this.loadContent();
         this.checkNotifications();
         this.startReminderChecker();
+        Widgets.init();
 
         // Auto open sidebar on Web Desktop (>= 1024px)
         if (window.innerWidth >= 1024) {
@@ -93,11 +94,7 @@ const App = {
             }
         });
 
-        document.getElementById('closeSidebar').addEventListener('click', () => {
-            sidebar.classList.remove('open');
-            document.body.classList.remove('sidebar-open');
-            overlay.classList.remove('visible');
-        });
+
 
         overlay.addEventListener('click', () => {
             sidebar.classList.remove('open');
@@ -231,6 +228,78 @@ const App = {
         const notifs = Storage.get(Storage.KEYS.NOTIF);
         const unreadCount = notifs.filter(n => n.unread).length;
         UI.updateNotifBadge(unreadCount);
+    }
+};
+
+const Widgets = {
+    init() {
+        this.updateTime();
+        setInterval(() => this.updateTime(), 1000);
+        this.fetchLocationAndWeather();
+    },
+
+    updateTime() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const el = document.getElementById('sb-time');
+        if (el) el.innerText = timeStr;
+    },
+
+    async fetchLocationAndWeather() {
+        if (!navigator.geolocation) {
+            this.updateStatus('sb-location', 'Geo tidak didukung');
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const { latitude, longitude } = pos.coords;
+            
+            // 1. Get City Name (Nominatim via Alternative Proxy)
+            try {
+                const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+                const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+                const data = await res.json();
+                const city = data.address.city || data.address.town || data.address.suburb || 'Lokasi Terdeteksi';
+                const locEl = document.getElementById('sb-location');
+                if (locEl) locEl.innerText = city;
+            } catch (e) {
+                console.error('Location error:', e);
+                const locEl = document.getElementById('sb-location');
+                if (locEl) locEl.innerText = 'Lokasi Terdeteksi';
+            }
+
+            // 2. Get Weather (Open-Meteo via Alternative Proxy)
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+                const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+                const data = await res.json();
+                const temp = Math.round(data.current_weather.temperature);
+                const code = data.current_weather.weathercode;
+                
+                let desc = 'Cerah';
+                if (code > 0 && code <= 3) desc = 'Berawan';
+                else if (code >= 45 && code <= 48) desc = 'Berkabut';
+                else if (code >= 51 && code <= 67) desc = 'Gerimis';
+                else if (code >= 71 && code <= 82) desc = 'Hujan';
+                else if (code >= 95) desc = 'Badai';
+
+                const weatherEl = document.getElementById('sb-weather');
+                if (weatherEl) weatherEl.innerText = `${temp}°C, ${desc}`;
+            } catch (e) {
+                console.error('Weather error:', e);
+                const weatherEl = document.getElementById('sb-weather');
+                if (weatherEl) weatherEl.innerText = 'Gagal memuat cuaca';
+            }
+        }, (err) => {
+            console.warn('Geolocation error:', err);
+            this.updateStatus('sb-location', 'Akses lokasi ditolak');
+            this.updateStatus('sb-weather', 'Izin lokasi diperlukan');
+        });
+    },
+
+    updateStatus(id, text) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = text;
     }
 };
 
