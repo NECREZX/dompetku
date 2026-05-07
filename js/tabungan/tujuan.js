@@ -10,20 +10,24 @@ const DashboardTabungan = {
                     </div>
                 </div>
                 
-                <div class="card balance-card" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; margin-bottom: 24px;">
-                    <div class="card-title" style="color: white; font-size: 11px;">Total Dana Terkumpul</div>
+                <div class="card balance-card" style="background: #b07840; color: white; border: none; margin-bottom: 24px; padding: 28px; box-shadow: 0 10px 30px rgba(176, 120, 64, 0.3);">
+                    <div class="card-title" style="color: rgba(255, 255, 255, 0.7); font-size: 11px;">Total Dana Terkumpul</div>
                     <div class="card-value" style="color: white; font-size: 34px;">${Format.rupiah(data.totalCollected)}</div>
                 </div>
 
+
+
                 <div class="flex gap-4 mb-8">
                     <div class="card" style="flex:1; margin-bottom:0; padding: 20px; border: 1px solid var(--border);">
-                        <div class="card-title" style="color: var(--accent);">Target Total</div>
-                        <div class="card-value" style="font-size:18px; color: var(--text-muted);">${Format.rupiah(data.totalTarget)}</div>
+                        <div class="card-title" style="color: var(--text);">Target Total</div>
+                        <div class="card-value" style="font-size:18px; color: var(--text);">${Format.rupiah(data.totalTarget)}</div>
+
                     </div>
 
                     <div class="card" style="flex:1; margin-bottom:0; padding: 20px;">
-                        <div class="card-title" style="color: var(--accent);">Progress</div>
-                        <div class="card-value" style="font-size:18px; color: var(--text-muted)">${data.overallProgress}%</div>
+                        <div class="card-title" style="color: var(--text);">Progress</div>
+                        <div class="card-value" style="font-size:18px; color: var(--text)">${data.overallProgress}%</div>
+
                     </div>
                 </div>
 
@@ -68,7 +72,7 @@ const DashboardTabungan = {
                 <div class="card" style="padding: 20px; border: 1px solid var(--border);">
                     <div class="flex justify-between items-center mb-4">
                         <div>
-                            <div style="font-weight:800; font-size:16px; color: var(--primary)">${g.name}</div>
+                             <div style="font-weight:800; font-size:16px; color: var(--text)">${g.name}</div>
                             <div style="font-size:12px; color:var(--text-muted); font-weight: 600;">${Format.rupiah(g.collected)} / ${Format.rupiah(g.target)}</div>
                         </div>
                         <div style="font-weight:800; color:var(--accent); font-size: 18px;">${progress}%</div>
@@ -188,7 +192,7 @@ const TujuanTabungan = {
                 <div class="card" style="margin-bottom: 20px; padding: 24px; border: 1px solid var(--border);">
                     <div class="flex justify-between items-start mb-6">
                         <div>
-                            <div style="font-weight:800; font-size:18px; color: var(--primary)">${g.name}</div>
+                             <div style="font-weight:800; font-size:18px; color: var(--text)">${g.name}</div>
                             <div style="font-size:13px; font-weight:700; color: var(--text-muted)">${Format.rupiah(g.collected)} / ${Format.rupiah(g.target)}</div>
                         </div>
                         <div class="flex gap-2">
@@ -237,7 +241,12 @@ const TujuanTabungan = {
                 logs = logs.filter(l => l.goalId !== id);
                 Storage.set(Storage.KEYS.TABUNGAN_LOG, logs);
 
-                UI.showToast('Tujuan dihapus');
+                Swal.fire({
+                    title: 'Dihapus',
+                    text: 'Tujuan tabungan telah berhasil dihapus.',
+                    icon: 'success',
+                    confirmButtonColor: 'var(--primary)',
+                });
                 this.render(document.getElementById('appContent'));
             }
         });
