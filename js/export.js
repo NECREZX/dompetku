@@ -7,17 +7,18 @@ const Export = {
         const sources = Storage.get(Storage.KEYS.SUMBER);
         
         // Header Colors & Styling
-        const navyColor = [30, 58, 95]; // Soft Navy Blue (Synced)
-        const primaryColor = [232, 105, 106]; // Coral for accents
+        const darkColor = [176, 120, 64]; // Wood Brown instead of Dark Brown
+        const woodColor = [176, 120, 64]; 
         
         // Logo / App Name
         doc.setFontSize(28);
-        doc.setTextColor(navyColor[0], navyColor[1], navyColor[2]);
+        doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
         doc.setFont('helvetica', 'bold');
         doc.text('DompetKu', 14, 22);
+
         
         // Decorative line
-        doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.setDrawColor(woodColor[0], woodColor[1], woodColor[2]);
         doc.setLineWidth(1.5);
         doc.line(14, 25, 60, 25); 
 
@@ -67,11 +68,13 @@ const Export = {
             body: tableData,
             theme: 'grid',
             headStyles: { 
-                fillColor: navyColor, 
-                textColor: [255, 255, 255], 
+                fillColor: [245, 240, 232], 
+                textColor: [60, 60, 60], 
                 fontStyle: 'bold',
                 halign: 'center'
             },
+
+
             styles: { fontSize: 8.5, cellPadding: 3, lineColor: [230, 230, 230] },
             columnStyles: {
                 0: { halign: 'center' },
@@ -102,45 +105,40 @@ const Export = {
             finalY = 20;
         }
 
-        doc.setFontSize(14);
-        doc.setTextColor(navyColor[0], navyColor[1], navyColor[2]);
+        // Summary Title
+        doc.setFontSize(11);
+        doc.setTextColor(60, 60, 60);
         doc.setFont('helvetica', 'bold');
         doc.text('RINGKASAN LAPORAN', 14, finalY);
 
+        const cardHeight = 22;
         const netBalance = totalIncome - totalExpense;
-        const cardWidth = (pageWidth - 28 - 10) / 3; // 3 cards with 5mm gap
+        const cardWidth = (pageWidth - 28 - 10) / 3;
+        const bgCream = [250, 248, 245]; // Even softer cream
+
+        // Function to draw a clean summary card (SOFT STYLE ONLY)
+        const drawCard = (x, y, label, value, valueColor) => {
+            doc.setFillColor(bgCream[0], bgCream[1], bgCream[2]);
+            doc.setDrawColor(220, 220, 220);
+            doc.roundedRect(x, y + 4, cardWidth, cardHeight, 1.5, 1.5, 'FD');
+            
+            // Side indicator line for premium feel
+            doc.setDrawColor(valueColor[0], valueColor[1], valueColor[2]);
+            doc.setLineWidth(1);
+            doc.line(x + 1, y + 6, x + 1, y + 4 + cardHeight - 2);
+
+            doc.setTextColor(120, 120, 120);
+            doc.setFontSize(6.5); doc.setFont('helvetica', 'bold'); doc.text(label, x + 5, y + 10);
+            doc.setTextColor(valueColor[0], valueColor[1], valueColor[2]);
+            doc.setFontSize(11); doc.text(Format.rupiah(value), x + 5, y + 18);
+        };
+
+        drawCard(14, finalY, 'TOTAL PEMASUKAN', totalIncome, [16, 150, 100]); // Darker green
+        drawCard(14 + cardWidth + 5, finalY, 'TOTAL PENGELUARAN', totalExpense, [200, 50, 50]); // Darker red
         
-        // Income Card
-        doc.setDrawColor(200);
-        doc.setFillColor(255);
-        doc.roundedRect(14, finalY + 5, cardWidth, 25, 2, 2, 'FD');
-        doc.setFontSize(8);
-        doc.setTextColor(100);
-        doc.text('TOTAL PEMASUKAN', 14 + 5, finalY + 12);
-        doc.setFontSize(11);
-        doc.setTextColor(16, 185, 129);
-        doc.text(Format.rupiah(totalIncome), 14 + 5, finalY + 22);
+        const netColor = netBalance >= 0 ? [140, 100, 60] : [200, 50, 50]; // Muted brown for net
+        drawCard(14 + (cardWidth + 5) * 2, finalY, 'SISA SALDO (NET)', netBalance, netColor);
 
-        // Expense Card
-        doc.setFillColor(255);
-        doc.roundedRect(14 + cardWidth + 5, finalY + 5, cardWidth, 25, 2, 2, 'FD');
-        doc.setFontSize(8);
-        doc.setTextColor(100);
-        doc.text('TOTAL PENGELUARAN', 14 + cardWidth + 5 + 5, finalY + 12);
-        doc.setFontSize(11);
-        doc.setTextColor(239, 68, 68);
-        doc.text(Format.rupiah(totalExpense), 14 + cardWidth + 5 + 5, finalY + 22);
-
-        // Net Balance Card
-        const balanceColor = netBalance >= 0 ? navyColor : [232, 105, 106];
-        doc.setFillColor(balanceColor[0], balanceColor[1], balanceColor[2]);
-        doc.roundedRect(14 + (cardWidth + 5) * 2, finalY + 5, cardWidth, 25, 2, 2, 'F');
-        doc.setFontSize(8);
-        doc.setTextColor(255);
-        doc.text('SALDO AKHIR (NET)', 14 + (cardWidth + 5) * 2 + 5, finalY + 12);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text(Format.rupiah(netBalance), 14 + (cardWidth + 5) * 2 + 5, finalY + 22);
 
         // Add Footer
         const pageCount = doc.internal.getNumberOfPages();
@@ -163,17 +161,18 @@ const Export = {
         const logs = Storage.get(Storage.KEYS.TABUNGAN_LOG);
         const goals = Storage.get(Storage.KEYS.TABUNGAN);
         
-        const navyColor = [30, 58, 95]; // Soft Navy Blue (Synced)
-        const primaryColor = [232, 105, 106]; // Coral
+        const darkColor = [176, 120, 64];
+        const woodColor = [176, 120, 64];
         
         doc.setFontSize(26);
-        doc.setTextColor(navyColor[0], navyColor[1], navyColor[2]);
+        doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
         doc.setFont('helvetica', 'bold');
         doc.text('DompetKu', 14, 22);
         
-        doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.setDrawColor(woodColor[0], woodColor[1], woodColor[2]);
         doc.setLineWidth(1.2);
         doc.line(14, 25, 50, 25);
+
 
         doc.setFontSize(14);
         doc.setTextColor(60, 60, 60);
@@ -195,38 +194,74 @@ const Export = {
             ];
         });
 
+        // Main Table
         doc.autoTable({
             startY: 55,
             head: [['Tanggal', 'Tujuan', 'Tipe', 'Jumlah', 'Catatan']],
             body: tableData,
             theme: 'grid',
             headStyles: { 
-                fillColor: navyColor, 
-                textColor: [255, 255, 255],
+                fillColor: [245, 240, 232], 
+                textColor: [60, 60, 60],
+                fontStyle: 'bold',
                 halign: 'center'
             },
-            styles: { fontSize: 8.5, cellPadding: 3, lineColor: [230, 230, 230] },
+
+            styles: { fontSize: 8.5, cellPadding: 3, lineColor: [235, 235, 235] },
             columnStyles: {
-                0: { halign: 'center' },
-                2: { halign: 'center' },
-                3: { fontStyle: 'bold', halign: 'right' }
+                0: { halign: 'center', cellWidth: 25 },
+                2: { halign: 'center', cellWidth: 20 },
+                3: { fontStyle: 'bold', halign: 'right', cellWidth: 35 }
             },
             didParseCell: function(data) {
                 if (data.section === 'body') {
                     const type = data.row.raw[2];
                     if (type === 'MASUK') {
-                        data.cell.styles.fillColor = [240, 253, 244]; // Soft Green BG
-                        data.cell.styles.textColor = [16, 60, 40]; // Dark Green Text
+                        data.cell.styles.fillColor = [240, 253, 244]; 
+                        data.cell.styles.textColor = [16, 60, 40]; 
                     } else {
-                        data.cell.styles.fillColor = [254, 242, 242]; // Soft Red BG
-                        data.cell.styles.textColor = [120, 20, 20]; // Dark Red Text
+                        data.cell.styles.fillColor = [254, 242, 242]; 
+                        data.cell.styles.textColor = [120, 20, 20]; 
                     }
                 }
             }
         });
 
-        // Footer
+        // Summary for Savings
+        let finalY = doc.lastAutoTable.finalY + 15;
         const pageWidth = doc.internal.pageSize.width;
+        let totalIn = logs.filter(l => l.type === 'masuk').reduce((a, b) => a + Number(b.amount), 0);
+        let totalOut = logs.filter(l => l.type === 'keluar').reduce((a, b) => a + Number(b.amount), 0);
+        
+        doc.setFontSize(11);
+        doc.setTextColor(60, 60, 60);
+        doc.setFont('helvetica', 'bold');
+        doc.text('RINGKASAN TABUNGAN', 14, finalY);
+
+        const cardWidth = (pageWidth - 28 - 10) / 3;
+        const cardHeight = 22;
+        const bgCream = [250, 248, 245];
+
+        const drawCard = (x, y, label, value, valueColor) => {
+            doc.setFillColor(bgCream[0], bgCream[1], bgCream[2]);
+            doc.setDrawColor(220, 220, 220);
+            doc.roundedRect(x, y + 4, cardWidth, cardHeight, 1.5, 1.5, 'FD');
+            
+            doc.setDrawColor(valueColor[0], valueColor[1], valueColor[2]);
+            doc.setLineWidth(1);
+            doc.line(x + 1, y + 6, x + 1, y + 4 + cardHeight - 2);
+
+            doc.setTextColor(120, 120, 120);
+            doc.setFontSize(6.5); doc.setFont('helvetica', 'bold'); doc.text(label, x + 5, y + 10);
+            doc.setTextColor(valueColor[0], valueColor[1], valueColor[2]);
+            doc.setFontSize(11); doc.text(Format.rupiah(value), x + 5, y + 18);
+        };
+
+        drawCard(14, finalY, 'TOTAL MASUK', totalIn, [16, 150, 100]);
+        drawCard(14 + cardWidth + 5, finalY, 'TOTAL KELUAR', totalOut, [200, 50, 50]);
+        drawCard(14 + (cardWidth + 5) * 2, finalY, 'SALDO TABUNGAN', totalIn - totalOut, [140, 100, 60]);
+
+        // Footer
         const pageCount = doc.internal.getNumberOfPages();
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
@@ -239,5 +274,6 @@ const Export = {
         }
 
         doc.save(`DompetKu_Tabungan_${Date.now()}.pdf`);
+
     }
 };
