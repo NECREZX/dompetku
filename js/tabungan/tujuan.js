@@ -11,8 +11,8 @@ const DashboardTabungan = {
                 </div>
                 
                 <div class="card balance-card" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; margin-bottom: 24px;">
-                    <div class="card-title" style="color: white;">Total Dana Terkumpul</div>
-                    <div class="card-value" style="color: white; font-size: 32px;">${Format.rupiah(data.totalCollected)}</div>
+                    <div class="card-title" style="color: white; font-size: 11px;">Total Dana Terkumpul</div>
+                    <div class="card-value" style="color: white; font-size: 34px;">${Format.rupiah(data.totalCollected)}</div>
                 </div>
 
                 <div class="flex gap-4 mb-8">
