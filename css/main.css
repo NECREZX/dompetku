@@ -1,27 +1,30 @@
 :root {
-    /* === 60-30-10 Color Rule: LIGHT MODE (Fully Navy) === */
-    /* 60% → Soft Navy Background */
-    --background: #eef2f7;    /* Visible Soft Navy */
-    --surface: #ffffff;       /* Cards = white for clarity */
+    /* === WARM SAND THEME === */
+    /* 60% → Warm Cream Background */
+    --background: #f5f0e8;    
+    --surface: #ffffff;       
 
     /* 30% → Sidebar, Navbar, Bottom Bar */
-    --bar-bg: #1e293b;        /* Professional Navy Blue */
+    --bar-bg: #ede6d6;        /* Slightly darker cream */
 
-    /* 10% → Accent: Coral (Pink) */
-    --primary: #e8696a;
-    --primary-light: #f0908f;
-    --accent: #e8696a;
-    --accent-light: #f0908f;
+    /* 10% → Accent: Wood Brown */
+    --primary: #b07840;
+    --primary-light: #c48c54;
+    --accent: #b07840;
+    --accent-light: #c48c54;
 
     /* Supporting Colors */
-    --success: #10b981;       /* Green for Income */
-    --danger: #e8696a;        /* Pink Coral for Expense */
+    --success: #10b981;       
+    --danger: #ef4444;        /* Red for Expenses */
     --warning: #f59e0b;
 
-    /* Text — Navy theme */
-    --text: #0f172a;          
-    --text-muted: #64748b;
-    --border: #cbd5e1;
+    /* Text — Strictly Black theme */
+    --text: #000000;          
+    --text-muted: rgba(0, 0, 0, 0.6); /* Black with opacity, no navy */
+    --border: rgba(0, 0, 0, 0.1);
+
+
+
 
     /* Misc */
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
@@ -44,6 +47,8 @@
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
+
+
 
 body {
     font-family: 'Space Grotesk', sans-serif;
@@ -75,20 +80,20 @@ body {
 .navbar *, .bottom-bar *, .sidebar * {
     /* Inherited white will cascade — specific overrides below */
 }
-.navbar .logo,
-.navbar #navbarClock,
-.navbar .nav-btn {
-    color: #ffffff !important;
+/* Bar elements contrast adjustments */
+.navbar .nav-btn, .navbar .logo {
+    color: var(--text) !important;
 }
-.bottom-bar .nav-item {
-    color: rgba(255, 255, 255, 0.55) !important;
+
+.bottom-bar .b-nav-item {
+    color: rgba(0, 0, 0, 0.55) !important;
 }
-.bottom-bar .nav-item.active {
-    color: #ffffff !important;
+
+
+.bottom-bar .b-nav-item.active {
+    color: var(--text) !important;
 }
-.bottom-bar .nav-item.active i {
-    color: var(--accent) !important;
-}
+
 
 /* Splash Screen (Matched to System) */
 .splash-screen {
@@ -118,7 +123,8 @@ body {
     justify-content: center;
     border-radius: 50%;
     overflow: hidden;
-    background: #0f172a; /* Menyamakan warna agar kotak melebur */
+    background: #1c1610; /* Warm Dark Brown */
+
 }
 
 .splash-logo-img {
@@ -246,7 +252,8 @@ p { color: var(--text-muted); font-size: 15px; font-weight: 500; }
 .hidden { display: none !important; }
 .text-center { text-align: center; }
 .text-success, .card-value.text-success { color: #10b981 !important; font-weight: 800 !important; font-family: 'Space Grotesk', sans-serif; font-size: 1.1em; }
-.text-danger, .card-value.text-danger { color: #e8696a !important; font-weight: 800 !important; font-family: 'Space Grotesk', sans-serif; font-size: 1.1em; }
+.text-danger, .card-value.text-danger { color: #ef4444 !important; font-weight: 800 !important; font-family: 'Space Grotesk', sans-serif; font-size: 1.1em; }
+
 .text-warning { color: var(--warning) !important; font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
 .card-value { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 1.2em; }
 .text-primary { color: var(--primary) !important; }
@@ -305,11 +312,20 @@ p { color: var(--text-muted); font-size: 15px; font-weight: 500; }
         width: calc(100% - 280px) !important;
     }
 
+    /* Bars shift to the right when sidebar is open */
     body.sidebar-open .navbar,
     body.sidebar-open .bottom-bar {
-        left: 295px !important; /* 280px sidebar + 15px margin */
-        max-width: calc(100% - 310px) !important;
+        left: 280px !important;
+        width: calc(100% - 280px) !important;
     }
+
+    /* Sidebar becomes full height on desktop to push the bars */
+    body.sidebar-open .sidebar {
+        top: 0 !important;
+        height: 100vh !important;
+    }
+
+
 
     /* Dashboard: Show all wallets without scroll */
     .wallet-container {
