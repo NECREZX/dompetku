@@ -1,17 +1,23 @@
 .bottom-bar {
     position: fixed;
-    bottom: 20px;
-    left: 15px;
-    right: 15px;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 72px;
-    background: var(--bar-bg); /* 30% Deep Teal */
-    border-radius: var(--radius-pill);
+    background: rgba(245, 240, 232, 0.7); /* Warm Cream transparency */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    max-width: 470px;
-    margin: 0 auto;
     padding: 0 10px;
+    transition: var(--transition);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+
 }
+
+.bottom-bar.scrolled {
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
+
 
 .bottom-nav {
     display: flex;
@@ -25,11 +31,13 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(0, 0, 0, 0.45);
+
     text-decoration: none;
     font-size: 10px;
     font-weight: 600;
     width: 25%;
+
     transition: var(--transition);
     border: none;
     background: none;
@@ -41,8 +49,9 @@
 }
 
 .b-nav-item.active {
-    color: #ffffff;
+    color: var(--text);
 }
+
 
 .b-nav-item.active i {
     color: var(--accent);
