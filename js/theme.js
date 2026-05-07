@@ -20,7 +20,7 @@ const Theme = {
             body.classList.add('dark-mode');
             body.classList.remove('light-mode');
             if (icon) icon.className = 'fas fa-sun';
-            if (metaTheme) metaTheme.setAttribute('content', '#0f172a');
+            if (metaTheme) metaTheme.setAttribute('content', '#1c1610');
         } else {
             body.classList.add('light-mode');
             body.classList.remove('dark-mode');
