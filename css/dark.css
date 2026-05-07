@@ -1,17 +1,19 @@
-/* === DARK MODE: NAVY & PINK BRANDING === */
+/* === DARK MODE: WARM DARK BROWN === */
 
 /* Root variables applied to body when .dark-mode is active */
 body.dark-mode {
-    --background: #0f172a;
-    --surface: #1e293b;
-    --bar-bg: #1e293b;
-    --primary: #e8696a;
-    --accent: #e8696a;
-    --text: #f1f5f9;
-    --text-muted: #94a3b8;
-    --border: #334155;
-    background-color: #0f172a !important;
-    color: #f1f5f9 !important;
+    --background: #1c1610;
+    --surface: #261e16;
+    --bar-bg: #261e16;
+    --primary: #d4a373; /* Brighter Wood Brown for Dark Mode */
+    --accent: #d4a373;
+
+    --text: #f5f0e8;
+    --text-muted: #c4beb4; /* Brighter muted text for better contrast */
+
+    --border: #3d3126;
+    background-color: #1c1610 !important;
+    color: #f5f0e8 !important;
 }
 
 /* Global Content Area Overrides */
@@ -24,131 +26,132 @@ body.dark-mode .main-wrapper {
 /* Cards & Containers */
 body.dark-mode .card,
 body.dark-mode .modal-content {
-    background: #1e293b !important;
-    border: 1px solid #334155 !important;
-    color: #f1f5f9 !important;
+    background: #261e16 !important;
+    border: 1px solid #3d3126 !important;
+    color: #f5f0e8 !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Headings & Titles - Pink Coral Accent */
+/* Headings & Titles - Wood Brown Accent */
 body.dark-mode h1, 
 body.dark-mode h2, 
 body.dark-mode h3, 
 body.dark-mode .card-title,
 body.dark-mode .modal-title {
-    color: #e8696a !important;
+    color: #d4a373 !important;
 }
 
-/* NOMINALS (The main priority) */
-/* Income = Green */
+
+/* NOMINALS */
 body.dark-mode .text-success,
 body.dark-mode #appContent .text-success,
 body.dark-mode .card-value.text-success {
     color: #10b981 !important;
-    font-weight: 800 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
-    font-size: 1.1em;
 }
 
-/* Expense = Pink Coral */
 body.dark-mode .text-danger,
 body.dark-mode #appContent .text-danger,
-body.dark-mode .card-value.text-danger,
-body.dark-mode .text-accent {
-    color: #e8696a !important;
-    font-weight: 800 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
-    font-size: 1.1em;
+body.dark-mode .card-value.text-danger {
+    color: #ef4444 !important;
 }
 
-/* Neutral Card Values (Balance, etc) = White */
-body.dark-mode .card-value:not(.text-success):not(.text-danger) {
-    color: #ffffff !important;
-    font-weight: 800 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
-    font-size: 1.2em;
+body.dark-mode .text-accent {
+    color: #d4a373 !important;
 }
+
+
+
+/* Neutral Card Values = Light Cream */
+body.dark-mode .card-value:not(.text-success):not(.text-danger) {
+    color: #f5f0e8 !important;
+}
+
+/* Force Wallet Balance Visibility in Dark Mode */
+body.dark-mode .wallet-card .card-value {
+    color: #f5f0e8 !important;
+}
+
 
 /* Tables & Lists */
-body.dark-mode .table-responsive table {
-    background: transparent !important;
-}
-
 body.dark-mode tr {
-    border-bottom: 1px solid #334155 !important;
+    border-bottom: 1px solid #3d3126 !important;
 }
 
 body.dark-mode td, 
 body.dark-mode th {
-    color: #f1f5f9 !important;
-    background: transparent !important;
+    color: #f5f0e8 !important;
 }
 
 body.dark-mode th {
-    color: #94a3b8 !important;
-    text-transform: uppercase;
-    font-size: 11px;
+    color: #a89f91 !important;
 }
 
 /* Form Elements */
-body.dark-mode label,
-body.dark-mode .form-group label {
-    color: #e8696a !important;
-    font-weight: 700 !important;
+body.dark-mode label {
+    color: #d4a373 !important;
 }
+
 
 body.dark-mode input, 
 body.dark-mode select, 
 body.dark-mode textarea {
-    background: #0f172a !important;
-    border: 1px solid #334155 !important;
-    color: #f1f5f9 !important;
-    border-radius: 12px !important;
+    background: #1c1610 !important;
+    border: 1px solid #3d3126 !important;
+    color: #f5f0e8 !important;
 }
 
-body.dark-mode input:focus, 
-body.dark-mode select:focus {
-    border-color: #e8696a !important;
-    outline: none !important;
+body.dark-mode input:focus {
+    border-color: #b07840 !important;
 }
 
 /* Bars (Navbar, Sidebar) */
 body.dark-mode .navbar,
-body.dark-mode .sidebar,
 body.dark-mode .bottom-bar {
-    background: #1e293b !important;
+    background: rgba(28, 22, 16, 0.7) !important;
+}
+
+body.dark-mode .sidebar {
+    background: rgba(28, 22, 16, 0.7) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+body.dark-mode .navbar .nav-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff !important;
+}
+
+body.dark-mode .bottom-bar .b-nav-item {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+body.dark-mode .bottom-bar .b-nav-item.active {
+    color: #ffffff !important;
 }
 
 body.dark-mode .sidebar-item {
-    color: #f1f5f9 !important;
+    color: #f5f0e8 !important;
 }
 
 body.dark-mode .sidebar-item.active {
-    background: #e8696a !important;
+    background: #b07840 !important;
     color: #ffffff !important;
 }
 
 /* Scroll to Top */
 body.dark-mode .scroll-to-top {
-    background: #e8696a !important;
+    background: #b07840 !important;
     color: #ffffff !important;
-    border: none !important;
-    box-shadow: 0 4px 15px rgba(232, 105, 106, 0.4) !important;
 }
 
 /* SweetAlert2 */
 body.dark-mode .swal2-popup {
-    background: #1e293b !important;
-    color: #f1f5f9 !important;
-    border: 1px solid #334155 !important;
+    background: #261e16 !important;
+    color: #f5f0e8 !important;
+    border: 1px solid #3d3126 !important;
 }
 
 body.dark-mode .swal2-title,
 body.dark-mode .swal2-content {
-    color: #f1f5f9 !important;
-}
-
-/* Charts */
-body.dark-mode #navbarClock {
-    color: #ffffff !important;
+    color: #f5f0e8 !important;
 }
