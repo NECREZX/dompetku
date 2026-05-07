@@ -197,7 +197,7 @@ const App = {
         this.loadContent();
     },
 
-    loadContent() {
+    loadContent(preserveScroll = false) {
         const container = document.getElementById('appContent');
         
         if (this.currentModule === 'keuangan') {
@@ -221,7 +221,10 @@ const App = {
                 case 'riwayat': RiwayatAktivitas.render(container); break;
             }
         }
-        window.scrollTo(0,0);
+
+        if (!preserveScroll) {
+            window.scrollTo(0,0);
+        }
     },
 
     checkNotifications() {
