@@ -96,9 +96,10 @@ const RiwayatAktivitas = {
         container.innerHTML = `
             <div class="card mb-6" style="padding: 20px;">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-file-pen"></i> Tabel Catatan
+                    <h3 style="font-size: 16px;">
+                        Tabel Catatan
                     </h3>
+
                     ${notes.length > 3 ? `<button class="btn-text" onclick="RiwayatAktivitas.toggleNotes()" style="font-size: 12px; color: var(--accent); background: none; border: none; cursor: pointer; font-weight: 700;">${this.showAllNotes ? 'Sembunyikan' : 'Lihat Semua'}</button>` : ''}
                 </div>
                 <div class="table-responsive">
@@ -108,9 +109,10 @@ const RiwayatAktivitas = {
 
             <div class="card mb-6" style="padding: 20px;">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-bell text-warning"></i> Tabel Pengingat
+                    <h3 style="font-size: 16px;">
+                        Tabel Pengingat
                     </h3>
+
                     ${reminders.length > 3 ? `<button class="btn-text" onclick="RiwayatAktivitas.toggleReminders()" style="font-size: 12px; color: var(--accent); background: none; border: none; cursor: pointer; font-weight: 700;">${this.showAllReminders ? 'Sembunyikan' : 'Lihat Semua'}</button>` : ''}
                 </div>
                 <div class="table-responsive">
@@ -120,9 +122,10 @@ const RiwayatAktivitas = {
 
             <div class="card mb-6" style="padding: 20px;">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-heart text-danger"></i> Tabel Wishlist (Impian)
+                    <h3 style="font-size: 16px;">
+                        Tabel Wishlist
                     </h3>
+
                     ${wishlist.length > 3 ? `<button class="btn-text" onclick="RiwayatAktivitas.toggleWishlistAll()" style="font-size: 12px; color: var(--accent); background: none; border: none; cursor: pointer; font-weight: 700;">${this.showAllWishlist ? 'Sembunyikan' : 'Lihat Semua'}</button>` : ''}
                 </div>
                 <div class="table-responsive">
@@ -164,7 +167,8 @@ const RiwayatAktivitas = {
                             <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 <div style="display: flex; align-items: center; gap: 10px;">
                                     <input type="checkbox" ${w.achieved ? 'checked' : ''} onchange="RiwayatAktivitas.toggleWishlist('${w.id}')" style="cursor: pointer; width: 18px; height: 18px;">
-                                    <div style="font-weight: 700; color: var(--primary); font-size: 13px; ${w.achieved ? 'text-decoration: line-through;' : ''}">${w.title}</div>
+                                    <div style="font-weight: 700; color: var(--text); font-size: 13px; ${w.achieved ? 'text-decoration: line-through;' : ''}">${w.title}</div>
+
                                 </div>
                             </td>
                             <td>
@@ -212,7 +216,12 @@ const RiwayatAktivitas = {
                 let wishlist = Storage.get(Storage.KEYS.WISHLIST);
                 wishlist = wishlist.filter(w => w.id !== id);
                 Storage.set(Storage.KEYS.WISHLIST, wishlist);
-                UI.showToast('Impian dihapus');
+                Swal.fire({
+                    title: 'Dihapus',
+                    text: 'Impian telah berhasil dihapus.',
+                    icon: 'success',
+                    confirmButtonColor: 'var(--primary)',
+                });
                 this.renderTables();
             }
         });
@@ -246,7 +255,8 @@ const RiwayatAktivitas = {
                     ${displayData.map(a => `
                         <tr onclick="RiwayatAktivitas.viewDetail('${a.id}')" style="cursor: pointer;">
                             <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                <div style="font-weight: 700; color: var(--primary); font-size: 13px;">${a.title}</div>
+                                <div style="font-weight: 700; color: var(--text); font-size: 13px;">${a.title}</div>
+
                                 <div style="font-size: 11px; color: var(--text-muted);">${a.content || '-'}</div>
                             </td>
                             <td style="font-size: 11px; color: var(--text-muted);">${Format.date(a.createdAt.split('T')[0])}</td>
@@ -308,7 +318,8 @@ const RiwayatAktivitas = {
                         return `
                             <tr>
                                 <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                    <div style="font-weight: 700; color: var(--primary); font-size: 13px;">${a.title}</div>
+                                    <div style="font-weight: 700; color: var(--text); font-size: 13px;">${a.title}</div>
+
                                 </td>
                                 <td style="font-size: 11px; color: var(--warning); font-weight: 600;">
                                     ${hasDate ? Format.date(a.datetime.split('T')[0]) + ' ' + a.datetime.split('T')[1] : '-'}
@@ -343,7 +354,12 @@ const RiwayatAktivitas = {
                 Storage.set(Storage.KEYS.AKTIVITAS, activities);
                 
                 Storage.addNotif('Data Dihapus', `"${act ? act.title : ''}" telah dihapus.`);
-                UI.showToast('Data berhasil dihapus');
+                Swal.fire({
+                    title: 'Dihapus',
+                    text: 'Aktivitas telah berhasil dihapus.',
+                    icon: 'success',
+                    confirmButtonColor: 'var(--primary)',
+                });
                 this.renderTables();
             }
         });
