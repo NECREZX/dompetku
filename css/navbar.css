@@ -3,15 +3,16 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 64px;
+    height: calc(64px + env(safe-area-inset-top));
     background: rgba(245, 240, 232, 0.7); /* Warm Cream transparency */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 1000;
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* Align content to the bottom of the safe area padded container */
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 0 16px 10px 16px; /* 10px bottom padding for content */
+    padding-top: env(safe-area-inset-top);
     transition: var(--transition);
     border-bottom: none;
 
