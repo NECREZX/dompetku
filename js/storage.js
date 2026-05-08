@@ -16,7 +16,7 @@ const Storage = {
     get(key) {
         const data = localStorage.getItem(key);
         if (key === this.KEYS.USER) {
-            return data ? JSON.parse(data) : { name: 'Pengguna Setia', role: 'Pro Member' };
+            return data ? JSON.parse(data) : { name: 'Pengguna Setia', role: 'Pro Member', gender: 'laki-laki' };
         }
         return data ? JSON.parse(data) : [];
     },
