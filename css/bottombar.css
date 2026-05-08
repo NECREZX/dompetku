@@ -4,17 +4,34 @@
     left: 0;
     right: 0;
     height: calc(72px + env(safe-area-inset-bottom));
-    background: rgba(245, 240, 232, 0.7); /* Warm Cream transparency */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* Default: solid (sama seperti navbar default) */
+    background: var(--background);
     z-index: 1000;
     padding: 0 10px env(safe-area-inset-bottom) 10px;
     transition: var(--transition);
     border-top: none;
-
+    --notch-x: 12.5%; /* Diupdate oleh JS */
 }
 
+/* Lekukan ke dalam: setengah lingkaran melengkung ke bawah, warna halaman */
+.bottom-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 48px;
+    height: 24px;
+    background: var(--background);
+    border-radius: 0 0 24px 24px; /* Lengkung ke BAWAH = lekukan ke dalam */
+    left: var(--notch-x);
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+/* Scrolled: semi-transparan + blur (sama seperti navbar scrolled) */
 .bottom-bar.scrolled {
+    background: rgba(245, 240, 232, 0.85) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
 }
 
@@ -24,6 +41,8 @@
     justify-content: space-around;
     align-items: center;
     height: 100%;
+    position: relative;
+    z-index: 3;
 }
 
 .b-nav-item {
@@ -46,14 +65,34 @@
 
 .b-nav-item i {
     font-size: 20px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .b-nav-item.active {
     color: var(--text);
+    z-index: 3;
+    position: relative;
 }
 
 
 .b-nav-item.active i {
     color: var(--accent);
-    transform: scale(1.1);
+    transform: translateY(-20px) scale(1.1);
+    background: var(--background);
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.b-nav-item.active span {
+    transform: translateY(-6px);
+}
+
+/* Dark mode */
+body.dark-mode .b-nav-item.active i {
+    background: var(--background);
 }
