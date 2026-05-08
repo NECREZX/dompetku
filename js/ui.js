@@ -178,12 +178,30 @@ const UI = {
         const user = Storage.get(Storage.KEYS.USER);
         const nameElements = document.querySelectorAll('.user-name');
         const roleElements = document.querySelectorAll('.user-rank');
-        const avatarElements = document.querySelectorAll('.user-profile img');
+        const profileContainers = document.querySelectorAll('.user-profile');
 
         nameElements.forEach(el => el.innerText = user.name);
         roleElements.forEach(el => el.innerText = user.role || 'Pro Member');
-        avatarElements.forEach(el => {
-            el.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=3b82f6&color=fff`;
+        
+        profileContainers.forEach(container => {
+            let avatar = container.querySelector('.user-avatar, img');
+            const imagePath = user.gender === 'perempuan' ? 'assets/img/wanita.png' : 'assets/img/pria.png';
+            
+            // Jika masih berupa div (inisial RT), ganti jadi img
+            if (avatar && avatar.tagName === 'DIV') {
+                const img = document.createElement('img');
+                img.className = 'user-avatar-img';
+                img.src = imagePath;
+                avatar.replaceWith(img);
+            } else if (avatar) {
+                avatar.src = imagePath;
+            } else {
+                // Jika tidak ada sama sekali, buat baru
+                const img = document.createElement('img');
+                img.className = 'user-avatar-img';
+                img.src = imagePath;
+                container.prepend(img);
+            }
         });
     },
 
@@ -199,7 +217,14 @@ const UI = {
                     <label>Status/Pekerjaan</label>
                     <input type="text" id="user-role-input" value="${user.role || ''}" placeholder="Contoh: Freelancer">
                 </div>
-                <button type="submit" class="btn btn-primary" style="width:100%">Simpan Perubahan</button>
+                <div class="form-group">
+                    <label>Jenis Kelamin</label>
+                    <select id="user-gender-input" class="form-control" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+                        <option value="laki-laki" ${user.gender === 'laki-laki' ? 'selected' : ''}>Laki-laki</option>
+                        <option value="perempuan" ${user.gender === 'perempuan' ? 'selected' : ''}>Perempuan</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 10px;">Simpan Perubahan</button>
             </form>
         `);
     },
@@ -208,8 +233,9 @@ const UI = {
         e.preventDefault();
         const name = document.getElementById('user-name-input').value;
         const role = document.getElementById('user-role-input').value;
+        const gender = document.getElementById('user-gender-input').value;
 
-        Storage.set(Storage.KEYS.USER, { name, role });
+        Storage.set(Storage.KEYS.USER, { name, role, gender });
         this.updateProfileUI();
         this.hideModal();
         
