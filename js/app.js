@@ -92,6 +92,7 @@ const App = {
                 document.body.classList.remove('sidebar-open');
                 overlay.classList.remove('visible');
             }
+            this.updateNotch();
         });
 
 
@@ -124,6 +125,15 @@ const App = {
                 overlay.classList.remove('visible');
             }
         });
+
+        // Update notch position whenever bottom bar size changes (sidebar toggle, window resize, etc)
+        const bottomBar = document.querySelector('.bottom-bar');
+        if (bottomBar && window.ResizeObserver) {
+            const ro = new ResizeObserver(() => this.updateNotch());
+            ro.observe(bottomBar);
+        } else {
+            window.addEventListener('resize', () => this.updateNotch());
+        }
     },
 
     switchModule(module) {
@@ -186,6 +196,20 @@ const App = {
             `;
         }
         nav.innerHTML = html;
+        this.updateNotch();
+    },
+
+    updateNotch() {
+        requestAnimationFrame(() => {
+            const activeItem = document.querySelector('.b-nav-item.active');
+            const bottomBar = document.querySelector('.bottom-bar');
+            if (activeItem && bottomBar) {
+                const barRect = bottomBar.getBoundingClientRect();
+                const itemRect = activeItem.getBoundingClientRect();
+                const centerX = itemRect.left + itemRect.width / 2 - barRect.left;
+                bottomBar.style.setProperty('--notch-x', `${centerX}px`);
+            }
+        });
     },
 
     switchTab(tab) {
